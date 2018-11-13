@@ -10,12 +10,21 @@ public class Ctrl : MonoBehaviour
     public View view;
 
     private FSMSystem fsm;
-
+    [HideInInspector]
+    public CameraManager cameraManager;
+    [HideInInspector]
+    public GameManager gameManager;
 
     private void Awake()
     {
         model = GameObject.FindGameObjectWithTag("Model").GetComponent<Model>();
         view = GameObject.FindGameObjectWithTag("View").GetComponent<View>();
+        cameraManager = GetComponent<CameraManager>();
+        gameManager = GetComponent<GameManager>();
+    }
+
+    private void Start()
+    {
         MakeFSM();
     }
 
@@ -26,7 +35,7 @@ public class Ctrl : MonoBehaviour
         FSMState[] states = GetComponentsInChildren<FSMState>();
         foreach (FSMState state in states)
         {
-            fsm.AddState(state);
+            fsm.AddState(state,this);
         }
 
         MenuState s = GetComponentInChildren<MenuState>();

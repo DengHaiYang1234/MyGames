@@ -52,6 +52,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 public enum Transition
 {
     NullTransition = 0, // Use this transition to represent a non-existing transition in your system
+    StartBtuuonClick = 1,
+    PauseButtonClick = 2,
 }
 
 /// <summary>
@@ -77,6 +79,12 @@ public enum StateID
 /// </summary>
 public abstract class FSMState : MonoBehaviour
 {
+    protected Ctrl ctrl;
+
+    public Ctrl CTRL
+    {
+        set { ctrl = value; }
+    }
     protected FSMSystem fsm;
     public FSMSystem FSM {
         set { fsm = value; }
@@ -212,6 +220,7 @@ public class FSMSystem
     {
         currentState = s;
         currentStateID = s.ID;
+        s.DoBeforeEntering();
     }
 
     /// <summary>
@@ -219,7 +228,7 @@ public class FSMSystem
     /// or prints an ERROR message if the state was already inside the List.
     /// First state added is also the initial state.
     /// </summary>
-    public void AddState(FSMState s)
+    public void AddState(FSMState s,Ctrl ctrl)
     {
         // Check for Null reference before deleting
         if (s == null)
@@ -228,7 +237,7 @@ public class FSMSystem
         }
 
         s.FSM = this;
-
+        s.CTRL = ctrl;
         // First State inserted is also the Initial state,
         //   the state the machine is in when the simulation begins
         if (states.Count == 0)
