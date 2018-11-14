@@ -14,6 +14,8 @@ public class Ctrl : MonoBehaviour
     public CameraManager cameraManager;
     [HideInInspector]
     public GameManager gameManager;
+    [HideInInspector]
+    public AudioManager audioManager;
 
     private void Awake()
     {
@@ -21,6 +23,7 @@ public class Ctrl : MonoBehaviour
         view = GameObject.FindGameObjectWithTag("View").GetComponent<View>();
         cameraManager = GetComponent<CameraManager>();
         gameManager = GetComponent<GameManager>();
+        audioManager = GetComponent<AudioManager>();
     }
 
     private void Start()

@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MenuState : FSMState {
-
+public class MenuState : FSMState
+{
     private void Awake()
     {
         stateID = StateID.Menu;
@@ -23,6 +23,7 @@ public class MenuState : FSMState {
 
     public void OnStartButtonClick()
     {
+        ctrl.audioManager.PlayCursor();
         fsm.PerformTransition(Transition.StartBtuuonClick);
     }
 }
