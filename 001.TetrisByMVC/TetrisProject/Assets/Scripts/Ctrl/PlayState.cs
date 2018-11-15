@@ -12,7 +12,7 @@ public class PlayState : FSMState {
 
     public override void DoBeforeEntering()
     {
-        ctrl.view.ShowGameUI();
+        ctrl.view.ShowGameUI(0,ctrl.model.HighScore);
         ctrl.cameraManager.ZoomIn();
         ctrl.gameManager.StartGame();
     }
@@ -28,5 +28,13 @@ public class PlayState : FSMState {
         ctrl.view.HideGameUI();
         ctrl.view.ShowRestartButton();
         ctrl.gameManager.PauseGame();
+    }
+
+    public void OnRestartButtonClick()
+    {
+        ctrl.view.HideGameOverUI();
+        ctrl.model.Restart();
+        ctrl.gameManager.StartGame();
+        ctrl.view.UpdateGameUI(0, ctrl.model.HighScore);
     }
 }

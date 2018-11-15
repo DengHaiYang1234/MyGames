@@ -4,9 +4,12 @@ using UnityEngine;
 
 public class AudioManager : MonoBehaviour
 {
+    private Ctrl ctrl_;
+
     public AudioClip cursor;
     public AudioClip drop;
     public AudioClip ctrl;
+    public AudioClip clearLine;
 
     private AudioSource audioSource;
 
@@ -15,6 +18,7 @@ public class AudioManager : MonoBehaviour
     private void Awake()
     {
         audioSource = GetComponent<AudioSource>();
+        ctrl_ = GetComponent<Ctrl>();
     }
 
     public void PlayCursor()
@@ -32,6 +36,11 @@ public class AudioManager : MonoBehaviour
         PlayAudio(ctrl);
     }
 
+    public void PlayClearLine()
+    {
+        PlayAudio(clearLine);
+    }
+
     private void PlayAudio(AudioClip clip)
     {
         if (isMute) return;
@@ -39,5 +48,10 @@ public class AudioManager : MonoBehaviour
         audioSource.Play();
     }
 
-
+    public void OnAudioButtonClick()
+    {
+        isMute = !isMute;
+        ctrl_.view.SetMuteActive(isMute);
+        if (!isMute) PlayCursor();
+    }
 }

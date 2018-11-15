@@ -16,7 +16,7 @@ public class Shape : MonoBehaviour
 
     private float stepTime = 0.8f;
 
-    private int multiple = 6;
+    private int multiple = 10;
 
     private bool isSpeed = false;
 
@@ -63,8 +63,9 @@ public class Shape : MonoBehaviour
             pos.y += 1;
             transform.position = pos;
             isPause = true;
+            bool isLineClear =  ctrl.model.PlaceShape(this.transform);
+            if (isLineClear) ctrl.audioManager.PlayClearLine();
             gameManager.FallDown();
-            ctrl.model.PlaceShape(this.transform);
             return;
         }
 

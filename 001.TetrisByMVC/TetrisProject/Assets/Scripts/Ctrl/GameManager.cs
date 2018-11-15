@@ -8,6 +8,8 @@ public class GameManager : MonoBehaviour
 
     private Shape currentShape = null;
 
+    private Transform blockHodler;
+
     public Shape[] shapes;
 
     public Color[] colors;
@@ -17,6 +19,7 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         ctrl = GetComponent<Ctrl>();
+        blockHodler = transform.Find("BlockHolder");
     }
 
     private void Update()
@@ -35,6 +38,7 @@ public class GameManager : MonoBehaviour
         int indexColor = Random.Range(0, colors.Length - 1);
 
         currentShape = GameObject.Instantiate(shapes[index]);
+        currentShape.transform.SetParent(blockHodler);
 
         currentShape.Init(colors[indexColor], ctrl,this);
     }
@@ -56,6 +60,30 @@ public class GameManager : MonoBehaviour
     public void FallDown()
     {
         currentShape = null;
+        if (ctrl.model.isDataUpdate)
+            ctrl.view.UpdateGameUI(ctrl.model.Score,ctrl.model.HighScore);
+
+        foreach (Transform t in blockHodler)
+        {
+            if (t.childCount <= 1)
+            {
+                Destroy(t.gameObject);
+            }
+        }
+
+        if (ctrl.model.IsGameOver())
+        {
+            PauseGame();
+            ctrl.view.ShowGameOver(ctrl.model.Score);
+        }
     }
 
+    public void ClearShape()
+    {
+        if (currentShape != null)
+        {
+            Destroy(currentShape.gameObject);
+            currentShape = null;
+        }
+    }
 }

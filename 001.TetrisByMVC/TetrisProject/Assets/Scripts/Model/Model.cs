@@ -6,11 +6,38 @@ public class Model : MonoBehaviour
 {
     public const int MAX_ROWS = 23;
     public const int MAX_COLUMNS = 10;
+    public const int NORMAL_ROWS = 20;
+
+    public bool isDataUpdate = false;
 
     private Transform[,] map = new Transform[MAX_COLUMNS, MAX_ROWS];
 
+    private int score = 0;
+    private int highScore = 0;
+    private int numberGame = 0;
+
+    
 
     private int currentRow = 0;
+
+    private void Awake()
+    {
+        LoadData();
+    }
+
+    public int Score {
+        get { return score; }
+    }
+
+    public int HighScore
+    {
+        get { return highScore; }
+    }
+
+    public int NumberScore
+    {
+        get { return numberGame; }
+    }
 
     /// <summary>
     /// 检测是否在有效位置
@@ -47,7 +74,7 @@ public class Model : MonoBehaviour
     /// 放置Block
     /// </summary>
     /// <param name="t"></param>
-    public void PlaceShape(Transform t)
+    public bool PlaceShape(Transform t)
     {
         foreach (Transform child in t)
         {
@@ -55,10 +82,10 @@ public class Model : MonoBehaviour
             Vector2 pos = child.position.Round();
             map[(int) pos.x, (int) pos.y] = child;
             RecordCurretRowNumber((int)pos.y);
-            CheckMapByRow((int)pos.y);
+            //CheckMapByRow((int)pos.y);
         }
 
-        //CheckMap();
+        return CheckMap();
     }
 
     /// <summary>
@@ -88,18 +115,33 @@ public class Model : MonoBehaviour
     /// <summary>
     /// 检查地图是否需要消除
     /// </summary>
-    private void CheckMap()
+    private bool CheckMap()
     {
+        int count = 0;
         for (int i = 0; i < MAX_ROWS; i++)
         {
             bool isFull =  CheckIsRowFull(i);
             if (isFull)
             {
+                count++;
                 DeleteRow(i);
                 MoveDownRowsAbove(i + 1);
                 i--;
             }
         }
+
+        if (count > 0)
+        {
+            score += (count*100);
+            if (score > highScore)
+            {
+                highScore = score;
+            }
+            isDataUpdate = true;
+        }
+
+
+        return count > 0 ? true : false;
     }
 
 
@@ -156,6 +198,62 @@ public class Model : MonoBehaviour
                 map[i, row - 1].position += new Vector3(0, -1, 0);
             }
         }
+    }
+
+    private void LoadData()
+    {
+        highScore =  PlayerPrefs.GetInt("HighScore", 0);
+        numberGame =  PlayerPrefs.GetInt("NumberGame", 0);
+    }
+
+    public void SaveData()
+    {
+        PlayerPrefs.SetInt("HighScore",highScore);
+        PlayerPrefs.SetInt("NumberGame", numberGame);
+    }
+
+
+    public bool IsGameOver()
+    {
+        for (int i = NORMAL_ROWS; i < MAX_ROWS; i++)
+        {
+            for (int j = 0; j < MAX_COLUMNS; j++)
+            {
+                if (map[j, i] != null)
+                {
+                    numberGame++;
+                    SaveData();
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    public void Restart()
+    {
+        for (int i = 0; i < MAX_COLUMNS; i++)
+        {
+            for (int j = 0; j < MAX_ROWS; j++)
+            {
+                if (map[i, j] != null) 
+                {
+                    Destroy(map[i, j].gameObject);
+                    map[i, j] = null;
+                }
+            }
+        }
+
+        score = 0;
+    }
+
+    public void ClearData()
+    {
+        score = 0;
+        highScore = 0;
+        numberGame = 0;
+        SaveData();
     }
 
 }
