@@ -7,15 +7,25 @@ public class MenuState : FSMState
     private void Awake()
     {
         stateID = StateID.Menu;
+        //注册StartBtuuonClick，绑定layState
         AddTransition(Transition.StartBtuuonClick, StateID.Play);
     }
 
+    /// <summary>
+    /// 设置默认状态时，会调用DoBeforeEntering(进入之前调用) 
+    /// </summary>
     public override void DoBeforeEntering()
     {
+        //显示菜单面板
         ctrl.view.ShowMenu();
+        //动效
         ctrl.cameraManager.ZoomOut();
     }
 
+
+    /// <summary>
+    /// 离开该状态之前
+    /// </summary>
     public override void DoBeforeLeaving()
     {
         ctrl.view.HideMenu();
@@ -24,6 +34,7 @@ public class MenuState : FSMState
     public void OnStartButtonClick()
     {
         ctrl.audioManager.PlayCursor();
+        //跳转至PlayState
         fsm.PerformTransition(Transition.StartBtuuonClick);
     }
 
@@ -45,4 +56,6 @@ public class MenuState : FSMState
         ctrl.gameManager.ClearShape();
         fsm.PerformTransition(Transition.StartBtuuonClick);
     }
+
+
 }

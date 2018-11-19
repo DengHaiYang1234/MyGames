@@ -37,7 +37,12 @@ public class Shape : MonoBehaviour
         InputControl();
     }
 
-
+    /// <summary>
+    /// 方块初始化
+    /// </summary>
+    /// <param name="color"></param>
+    /// <param name="ctrl"></param>
+    /// <param name="gameManager"></param>
     public void Init(Color color,Ctrl ctrl,GameManager gameManager)
     {
         foreach (Transform t in transform)
@@ -51,6 +56,9 @@ public class Shape : MonoBehaviour
         this.gameManager = gameManager;
     }
 
+    /// <summary>
+    /// 方块掉落判断
+    /// </summary>
     public void Fall()
     {
         Vector3 pos = transform.position;
@@ -60,11 +68,16 @@ public class Shape : MonoBehaviour
         //到达指定位置
         if (ctrl.model.IsVaildMapPosition(this.transform) == false)
         {
+            //位置跳转，此时不能再往下掉落
             pos.y += 1;
             transform.position = pos;
+            //该方块停止掉落
             isPause = true;
+            //整行消除
             bool isLineClear =  ctrl.model.PlaceShape(this.transform);
+            //播放音效
             if (isLineClear) ctrl.audioManager.PlayClearLine();
+            //掉落检测
             gameManager.FallDown();
             return;
         }
@@ -74,6 +87,8 @@ public class Shape : MonoBehaviour
 
     private void InputControl()
     {
+
+        #region 左右滑动
         float h = 0;
 
         if (Input.GetKeyDown(KeyCode.LeftArrow))
@@ -91,7 +106,7 @@ public class Shape : MonoBehaviour
             pos.x += h;
             transform.position = pos;
             
-            //控制Block左右滑动 但不超过地图有效位置
+            //控制Block左右滑动 但不超过地图有效位置  若超过，则将位置还原
             if (ctrl.model.IsVaildMapPosition(this.transform) == false)
             {
                 pos.x -= h;
@@ -103,6 +118,9 @@ public class Shape : MonoBehaviour
             }
         }
 
+        #endregion
+
+        #region 旋转
         if (Input.GetKeyDown(KeyCode.UpArrow))
         {
             transform.RotateAround(pivot.position, Vector3.forward, -90);
@@ -117,6 +135,9 @@ public class Shape : MonoBehaviour
             }
         }
 
+        #endregion
+
+        #region 加速下滑
         if (Input.GetKeyDown(KeyCode.DownArrow))
         {
             isSpeed = true;
@@ -127,8 +148,9 @@ public class Shape : MonoBehaviour
             isSpeed = false;
             stepTime = 0.8f;
         }
+        #endregion
     }
-    
+
     public void Pause()
     {
         isPause = true;

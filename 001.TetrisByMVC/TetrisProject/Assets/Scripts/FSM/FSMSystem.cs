@@ -202,6 +202,7 @@ public abstract class FSMState : MonoBehaviour
 /// </summary>
 public class FSMSystem
 {
+    //状态记录
     private List<FSMState> states;
 
     // The only way one can change the state of the FSM is by performing a transition
@@ -301,6 +302,7 @@ public class FSMSystem
         }
 
         // Check if the currentState has the transition passed as argument
+        //获取当前状态
         StateID id = currentState.GetOutputState(trans);
         if (id == StateID.NullStateID)
         {

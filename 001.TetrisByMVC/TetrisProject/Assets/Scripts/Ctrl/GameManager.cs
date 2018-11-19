@@ -31,6 +31,10 @@ public class GameManager : MonoBehaviour
         }
     }
 
+
+    /// <summary>
+    /// 方块生成
+    /// </summary>
     void SpawnShape()
     {
         int index = Random.Range(0, shapes.Length - 1);
@@ -39,7 +43,7 @@ public class GameManager : MonoBehaviour
 
         currentShape = GameObject.Instantiate(shapes[index]);
         currentShape.transform.SetParent(blockHodler);
-
+        //初始化
         currentShape.Init(colors[indexColor], ctrl,this);
     }
 

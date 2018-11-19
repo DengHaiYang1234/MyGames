@@ -12,6 +12,8 @@ public class Model : MonoBehaviour
 
     private Transform[,] map = new Transform[MAX_COLUMNS, MAX_ROWS];
 
+    private Dictionary<int, int> rowInfos = new Dictionary<int, int>();
+
     private int score = 0;
     private int highScore = 0;
     private int numberGame = 0;
@@ -51,6 +53,7 @@ public class Model : MonoBehaviour
             if (child.tag != "Block") continue;
             Vector2 pos = child.position.Round();
             
+            //边界范围内
             if (!IsInsideMap(pos)) return false;
 
             //该位置已经有Block
@@ -76,14 +79,62 @@ public class Model : MonoBehaviour
     /// <param name="t"></param>
     public bool PlaceShape(Transform t)
     {
+        int count = 0;
         foreach (Transform child in t)
         {
             if (child.tag != "Block") continue;
+            //worldPosition
             Vector2 pos = child.position.Round();
+               //列          行
             map[(int) pos.x, (int) pos.y] = child;
+
             RecordCurretRowNumber((int)pos.y);
+
+            ////检查每行是否已满
+            //if (rowInfos.ContainsKey((int) pos.y))
+            //{
+            //    //Debug.Log("pos.y:" + (int)pos.y);
+            //    rowInfos[(int) pos.y] += 1;
+            //    //Debug.Log("rowInfos[(int) pos.y]:" + rowInfos[(int)pos.y]);
+            //    //该行已满
+            //    if (rowInfos[(int)pos.y] >= 10)
+            //    {
+            //        Debug.LogError(" full (int)pos.y:" + (int)pos.y);
+            //        count++;
+            //        DeleteRow((int)pos.y);
+            //        MoveDownRowsAbove((int)pos.y + 1);
+
+            //        Debug.Log("currentRow:" + currentRow);
+            //        Debug.Log("(int)pos.y:" + (int)pos.y);
+            //        for (int index = (int)pos.y; index < currentRow + 1; index++)
+            //        {
+            //            Debug.LogError("pre  rindex:" + index);
+            //            Debug.LogError("pre  rowInfos[index]:" + rowInfos[index]);
+            //            rowInfos[index] = rowInfos[index + 1];
+            //            Debug.LogError("rindex:" + index);
+            //            Debug.LogError("rowInfos[index]:" + rowInfos[index]);
+            //        }
+            //    }
+            //}
+            //else
+            //{
+            //    rowInfos[(int)pos.y] = 1;
+            //}
             //CheckMapByRow((int)pos.y);
         }
+
+        //if (count > 0)
+        //{
+        //    score += (count * 100);
+        //    if (score > highScore)
+        //    {
+        //        highScore = score;
+        //    }
+        //    isDataUpdate = true;
+        //}
+
+
+        //return count > 0 ? true : false;
 
         return CheckMap();
     }

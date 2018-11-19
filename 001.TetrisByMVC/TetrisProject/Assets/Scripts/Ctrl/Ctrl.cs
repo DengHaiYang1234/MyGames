@@ -32,6 +32,10 @@ public class Ctrl : MonoBehaviour
     }
 
 
+
+    /// <summary>
+    /// 添加各个状态器
+    /// </summary>
     void MakeFSM()
     {
         fsm = new FSMSystem();
@@ -41,6 +45,7 @@ public class Ctrl : MonoBehaviour
             fsm.AddState(state,this);
         }
 
+        //默认开启MenuState状态
         MenuState s = GetComponentInChildren<MenuState>();
         fsm.SetCurrentState(s);
     }
