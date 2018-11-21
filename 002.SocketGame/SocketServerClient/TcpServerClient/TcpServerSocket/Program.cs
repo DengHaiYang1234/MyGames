@@ -11,11 +11,13 @@ namespace TcpServerSocket
     class Program
     {
 
-        public static byte[] dataBuffer = new byte[1024];
+        //public static byte[] dataBuffer = new byte[1024];
+        private static Message msg = new Message();
         static void Main(string[] args)
         {
             StartServerAsync();
             Console.ReadKey();
+            
         }
 
         //同步
@@ -79,8 +81,8 @@ namespace TcpServerSocket
             byte[] data = System.Text.Encoding.UTF8.GetBytes(message);
             clientSocket.Send(data);
 
-            //接收客户端的消息
-            clientSocket.BeginReceive(dataBuffer, 0, 1024, SocketFlags.None, ReceiveCallBack, clientSocket);
+            //接收客户端的消息  msg.Data:数据缓冲  msg.StartIndex:(接收数据的起始位置)存储所接收数据的位置，该位置从零开始计数。  msg.RemainSize:设置接收数据的数组长度
+            clientSocket.BeginReceive(msg.Data, msg.StartIndex, msg.RemainSize, SocketFlags.None, ReceiveCallBack, clientSocket);
 
             serverSocket.BeginAccept(AcceptCallBack, serverSocket);
         }
@@ -92,15 +94,20 @@ namespace TcpServerSocket
             try
             {
                 clientSocket = ar.AsyncState as Socket;
+                //停止接收之前的数据总长度
                 int count = clientSocket.EndReceive(ar);
                 if (count == 0)
                 {
                     clientSocket.Close();
                     return;
                 }
-                string msg = Encoding.UTF8.GetString(dataBuffer, 0, count);
-                Console.WriteLine("接收到【{0}】的消息:{1}", clientSocket.LocalEndPoint, msg);
-                clientSocket.BeginReceive(dataBuffer, 0, 1024, SocketFlags.None, ReceiveCallBack, clientSocket);
+                msg.AddCount(count);
+
+
+                msg.ReadMessage();
+                //string msgStr = Encoding.UTF8.GetString(msg.Data, 0, count);
+                //Console.WriteLine("接收到【{0}】的消息:{1}", clientSocket.LocalEndPoint, msgStr);
+                clientSocket.BeginReceive(msg.Data, msg.StartIndex, msg.RemainSize, SocketFlags.None, ReceiveCallBack, clientSocket);
             }
             catch (Exception e)
             {
