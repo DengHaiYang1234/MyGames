@@ -1,0 +1,1 @@
+D:\MyGames\002.SocketGame\SocketServerClient\TcpServerClient\GameServer\bin\Debug\GameServer.exe.config

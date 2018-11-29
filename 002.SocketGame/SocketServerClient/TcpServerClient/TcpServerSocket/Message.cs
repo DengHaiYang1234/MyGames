@@ -53,7 +53,7 @@ namespace TcpServerSocket
                     //count + 4: 消息中的前四个字节是该消息的长度 
                     //startIndex - (4 + count): 解析完该消息之后。数组剩余的消息长度
                     Array.Copy(data, count + 4, data, 0, startIndex - (4 + count));
-                    //更新消息存储的起始位置
+                    //更新消息存储的起始位置 
                     startIndex -= (count + 4);
                 }
                 else
