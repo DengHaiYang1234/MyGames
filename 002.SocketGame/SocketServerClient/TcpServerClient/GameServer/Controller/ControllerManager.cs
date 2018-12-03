@@ -31,9 +31,16 @@ namespace GameServer.Controller
             controllerDic.Add(defaultController.RequestCode, defaultController);
         }
 
+        /// <summary>
+        /// 处理消息后回复
+        /// </summary>
+        /// <param name="requestCode"></param>
+        /// <param name="actionCode"></param>
+        /// <param name="data"></param>
+        /// <param name="client"></param>
         public void HandleRequest(RequestCode requestCode,ActionCode actionCode,string data,Client client)
         {
-            BaseController controller;
+            BaseController controller; //获取对象
             bool isGet =  controllerDic.TryGetValue(requestCode, out controller);
             if (isGet == false)
             {
@@ -41,6 +48,7 @@ namespace GameServer.Controller
                 return;
             }
 
+            //对象方法
             string methodName = Enum.GetName(typeof(ActionCode),actionCode);
             //反射
             MethodInfo mi = controller.GetType().GetMethod(methodName);
@@ -49,15 +57,17 @@ namespace GameServer.Controller
                 Console.WriteLine("[警告]在Controller[" + controller.GetType()  +  "]没有对应的处理方法：[" + methodName + "]");
                 return;
             }
+            //传递对象方法参数，并开始执行方法
             object[] parameters = new object[] {data,client,server};
             object o =  mi.Invoke(controller, parameters);
+
             if (o == null || string.IsNullOrEmpty(o as string))
             {
                 return;
             }
 
+            //请求已处理。处理请求后的回复
             server.SendResponse(client, requestCode, o as string);
-
         }
     }
 }

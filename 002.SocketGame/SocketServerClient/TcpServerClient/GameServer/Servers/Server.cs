@@ -28,13 +28,13 @@ namespace GameServer.Servers
         public Server(string ipStr,int port)
         {
             SetIpEndPoint(ipStr, port);
-            controllerManager = new ControllerManager(this);
+            controllerManager = new ControllerManager(this); //连接数据库
         }
 
 
         public void SetIpEndPoint(string ipStr,int port)
         {
-            ipEndPoint = new IPEndPoint(IPAddress.Parse(ipStr), port);
+            ipEndPoint = new IPEndPoint(IPAddress.Parse(ipStr), port); //建立服务器连接
         }
 
         /// <summary>
@@ -46,7 +46,7 @@ namespace GameServer.Servers
             serverSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             serverSocket.Bind(ipEndPoint);
             serverSocket.Listen(0);
-            serverSocket.BeginAccept(AcceptCallBack,null);
+            serverSocket.BeginAccept(AcceptCallBack,null); //异步接收客户端连接
         }
 
         /// <summary>
@@ -73,11 +73,23 @@ namespace GameServer.Servers
             }
         }
 
+        /// <summary>
+        /// 向客户端的请求回复
+        /// </summary>
+        /// <param name="client"></param>
+        /// <param name="requestCode"></param>
+        /// <param name="data"></param>
         public void SendResponse(Client client,RequestCode requestCode,string data)
         {
             client.Send(requestCode, data);
         }
 
+        /// <summary>
+        /// 回复客户端请求
+        /// </summary>
+        /// <param name="requestCode"></param>
+        /// <param name="actionCode"></param>
+        /// <param name="data"></param>
         public void HandlerRequest(RequestCode requestCode, ActionCode actionCode, string data, Client client)
         {
             controllerManager.HandleRequest(requestCode, actionCode, data, client);

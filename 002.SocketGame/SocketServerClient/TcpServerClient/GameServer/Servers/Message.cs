@@ -74,7 +74,12 @@ namespace GameServer.Servers
         }
 
 
-
+        /// <summary>
+        /// 打包数据
+        /// </summary>
+        /// <param name="requestCode"></param>
+        /// <param name="data"></param>
+        /// <returns></returns>
         public static byte[] PackData(RequestCode requestCode,string data)
         {
             byte[] requestCodeBytes = BitConverter.GetBytes((int)requestCode);

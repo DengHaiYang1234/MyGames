@@ -55,7 +55,7 @@ namespace GameServer.Servers
                 }
 
 
-                msg.ReadMessage(count,OnProcessMessage);
+                msg.ReadMessage(count,OnProcessMessage);  //获取客户端的消息之后。是否需要回复客户端请求
 
                 //TODO 处理接收到的数据
                 Start();
@@ -67,6 +67,12 @@ namespace GameServer.Servers
             }
         }
 
+        /// <summary>
+        /// 回复客户端请求
+        /// </summary>
+        /// <param name="requestCode"></param>
+        /// <param name="actionCode"></param>
+        /// <param name="data"></param>
         private void OnProcessMessage(RequestCode requestCode,ActionCode actionCode,string data)
         {
             server.HandlerRequest(requestCode,actionCode,data,this);
@@ -81,6 +87,11 @@ namespace GameServer.Servers
             server.RemoveClient(this);
         }
 
+        /// <summary>
+        /// 向客户端发送数据
+        /// </summary>
+        /// <param name="requestCode"></param>
+        /// <param name="data"></param>
         public void Send(RequestCode requestCode, string data)
         {
             byte[] bytes = Message.PackData(requestCode, data);

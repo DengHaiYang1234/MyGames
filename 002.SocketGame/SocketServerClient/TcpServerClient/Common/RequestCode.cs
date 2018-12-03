@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace Common
 {
+    /// <summary>
+    /// 请求做什么
+    /// </summary>
     public enum RequestCode
     {
         None,
