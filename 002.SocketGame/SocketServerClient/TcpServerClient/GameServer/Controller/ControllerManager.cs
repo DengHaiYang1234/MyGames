@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Common;
+using System.Reflection;
+using GameServer.Servers;
 
 namespace GameServer.Controller
 {
@@ -13,17 +15,49 @@ namespace GameServer.Controller
     class ControllerManager
     {
         private Dictionary<RequestCode, BaseController> controllerDic = new Dictionary<RequestCode, BaseController>();
+        private Server server;
 
 
-        public ControllerManager()
+        public ControllerManager(Server server)
         {
-            Init();
+            this.server = server;
+            InitController();
         }
 
 
-        void Init()
+        void InitController()
         {
-            
+            DefaultController defaultController = new DefaultController();
+            controllerDic.Add(defaultController.RequestCode, defaultController);
+        }
+
+        public void HandleRequest(RequestCode requestCode,ActionCode actionCode,string data,Client client)
+        {
+            BaseController controller;
+            bool isGet =  controllerDic.TryGetValue(requestCode, out controller);
+            if (isGet == false)
+            {
+                Console.WriteLine("无法得到[" + requestCode + "[所对应的Controller,无法处理请求");
+                return;
+            }
+
+            string methodName = Enum.GetName(typeof(ActionCode),actionCode);
+            //反射
+            MethodInfo mi = controller.GetType().GetMethod(methodName);
+            if (mi == null)
+            {
+                Console.WriteLine("[警告]在Controller[" + controller.GetType()  +  "]没有对应的处理方法：[" + methodName + "]");
+                return;
+            }
+            object[] parameters = new object[] {data,client,server};
+            object o =  mi.Invoke(controller, parameters);
+            if (o == null || string.IsNullOrEmpty(o as string))
+            {
+                return;
+            }
+
+            server.SendResponse(client, requestCode, o as string);
+
         }
     }
 }
