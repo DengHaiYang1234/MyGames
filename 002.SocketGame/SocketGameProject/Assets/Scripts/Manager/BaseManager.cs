@@ -8,6 +8,12 @@ using UnityEngine;
 /// </summary>
 public class BaseManager
 {
+    protected GameFacade gameFacade;
+
+    public BaseManager(GameFacade facade)
+    {
+        this.gameFacade = facade;
+    }
     public virtual void OnInit()
     {
     }

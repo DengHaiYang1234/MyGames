@@ -10,6 +10,10 @@ public class UIManager :BaseManager{
     /// 1，定义一个静态的对象 在外界访问 在内部构造
     /// 2，构造方法私有化
 
+    public UIManager(GameFacade facade) : base(facade)
+    {
+        ParseUIPanelTypeJson();
+    }
 
     private Transform canvasTransform;
     private Transform CanvasTransform
@@ -26,11 +30,6 @@ public class UIManager :BaseManager{
     private Dictionary<UIPanelType, string> panelPathDict;//存储所有面板Prefab的路径
     private Dictionary<UIPanelType, BasePanel> panelDict;//保存所有实例化面板的游戏物体身上的BasePanel组件
     private Stack<BasePanel> panelStack;
-
-    public UIManager()
-    {
-        ParseUIPanelTypeJson();
-    }
 
     /// <summary>
     /// 把某个页面入栈，  把某个页面显示在界面上
@@ -85,14 +84,14 @@ public class UIManager :BaseManager{
         //BasePanel panel;
         //panelDict.TryGetValue(panelType, out panel);//TODO
 
-        BasePanel panel = panelDict.TryGet(panelType);
+        BasePanel panel = panelDict.TryGetV(panelType);
 
         if (panel == null)
         {
             //如果找不到，那么就找这个面板的prefab的路径，然后去根据prefab去实例化面板
             //string path;
             //panelPathDict.TryGetValue(panelType, out path);
-            string path = panelPathDict.TryGet(panelType);
+            string path = panelPathDict.TryGetV(panelType);
             GameObject instPanel = GameObject.Instantiate(Resources.Load(path)) as GameObject;
             instPanel.transform.SetParent(CanvasTransform,false);
             panelDict.Add(panelType, instPanel.GetComponent<BasePanel>());

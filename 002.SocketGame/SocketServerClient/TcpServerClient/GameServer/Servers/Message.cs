@@ -86,7 +86,8 @@ namespace GameServer.Servers
             byte[] dataBytes = Encoding.UTF8.GetBytes(data);
             int dataAmount = requestCodeBytes.Length + dataBytes.Length;
             byte[] dataAmountBytes = BitConverter.GetBytes(dataAmount);
-            return (byte[])dataAmountBytes.Concat(requestCodeBytes).Concat(dataBytes);
+            byte[] newBytes = dataAmountBytes.Concat(requestCodeBytes).ToArray();
+            return newBytes.Concat(dataBytes).ToArray();
         }
     }
 }

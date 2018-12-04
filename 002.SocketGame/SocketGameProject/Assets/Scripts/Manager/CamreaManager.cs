@@ -5,5 +5,8 @@ using UnityEngine;
 public class CamreaManager : BaseManager
 {
 
+    public CamreaManager(GameFacade facade) : base(facade)
+    {
 
+    }
 }
