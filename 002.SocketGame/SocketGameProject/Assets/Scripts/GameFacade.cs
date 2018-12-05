@@ -35,6 +35,8 @@ public class GameFacade : MonoBehaviour
         InitManager();
     }
 
+    
+
     private void InitManager()
     {
         uiMgr = new UIManager(this);
@@ -67,6 +69,11 @@ public class GameFacade : MonoBehaviour
         reqMgr.HandleReponse(requestCode, data);
     }
 
+    public void ShowMessage(string msg)
+    {
+        uiMgr.ShowMessage(msg);
+    }
+
     private void OnDestroyManager()
     {
         uiMgr.OnDestroy();
@@ -76,6 +83,7 @@ public class GameFacade : MonoBehaviour
         playerMgr.OnDestroy();
         clientMgr.OnDestroy();
     }
+
 
 
 

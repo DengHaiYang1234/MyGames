@@ -2,6 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using System;
+using LitJson;
+using System.IO;
 
 public class UIManager :BaseManager{
 
@@ -14,6 +16,8 @@ public class UIManager :BaseManager{
     {
         ParseUIPanelTypeJson();
     }
+
+
 
     private Transform canvasTransform;
     private Transform CanvasTransform
@@ -29,7 +33,28 @@ public class UIManager :BaseManager{
     }
     private Dictionary<UIPanelType, string> panelPathDict;//存储所有面板Prefab的路径
     private Dictionary<UIPanelType, BasePanel> panelDict;//保存所有实例化面板的游戏物体身上的BasePanel组件
+    private Dictionary<UIPanelType, Component> panelMap = new Dictionary<UIPanelType, Component>();
     private Stack<BasePanel> panelStack;
+
+
+    public override void OnInit()
+    {
+        base.OnInit();
+        PushPanel(UIPanelType.Message);
+        PushPanel(UIPanelType.Start);
+    }
+
+    public void MapingPanelByName<T>(UIPanelType panelType,T panel) where T : Component
+    {
+        panelMap.Add(panelType, panel);
+    }
+
+    public Component GetComponentByType(UIPanelType panelType)
+    {
+        return panelMap.TryGetV<UIPanelType, Component>(panelType);
+    }
+
+
 
     /// <summary>
     /// 把某个页面入栈，  把某个页面显示在界面上
@@ -81,9 +106,6 @@ public class UIManager :BaseManager{
             panelDict = new Dictionary<UIPanelType, BasePanel>();
         }
 
-        //BasePanel panel;
-        //panelDict.TryGetValue(panelType, out panel);//TODO
-
         BasePanel panel = panelDict.TryGetV(panelType);
 
         if (panel == null)
@@ -94,6 +116,7 @@ public class UIManager :BaseManager{
             string path = panelPathDict.TryGetV(panelType);
             GameObject instPanel = GameObject.Instantiate(Resources.Load(path)) as GameObject;
             instPanel.transform.SetParent(CanvasTransform,false);
+            instPanel.GetComponent<BasePanel>().UIMgr = this;
             panelDict.Add(panelType, instPanel.GetComponent<BasePanel>());
             return instPanel.GetComponent<BasePanel>();
         }
@@ -101,36 +124,46 @@ public class UIManager :BaseManager{
         {
             return panel;
         }
+    }
 
+
+    public void ShowMessage(string msg)
+    {
+        MessagePanel msgPanel = GetComponentByType(UIPanelType.Message) as MessagePanel;
+        if (msgPanel == null)
+        {
+            Debug.LogError("ShowMessage is Called But msgPanel == null");
+            return;
+        }
+        msgPanel.ShowMessage(msg);
     }
 
     [Serializable]
-    class UIPanelTypeJson
+    class UIPanelJson
     {
-        public List<UIPanelInfo> infoList;
+        public List<PanelInfo> infoList;
     }
+
+    [Serializable]
+    class PanelInfo
+    {
+        public string panelTypeString;
+        public string path;
+    }
+
     private void ParseUIPanelTypeJson()
     {
         panelPathDict = new Dictionary<UIPanelType, string>();
-
+       
         TextAsset ta = Resources.Load<TextAsset>("UIPanelType");
 
-        UIPanelTypeJson jsonObject = JsonUtility.FromJson<UIPanelTypeJson>(ta.text);
 
-        foreach (UIPanelInfo info in jsonObject.infoList) 
+        UIPanelJson jsonObject = JsonMapper.ToObject<UIPanelJson>(ta.text);
+
+        foreach (PanelInfo info in jsonObject.infoList)
         {
-            //Debug.Log(info.panelType);
-            panelPathDict.Add(info.panelType, info.path);
+            UIPanelType type = (UIPanelType)System.Enum.Parse(typeof(UIPanelType), info.panelTypeString);
+            panelPathDict.Add(type, info.path);
         }
-    }
-
-    /// <summary>
-    /// just for test
-    /// </summary>
-    public void Test()
-    {
-        string path ;
-        panelPathDict.TryGetValue(UIPanelType.Knapsack,out path);
-        Debug.Log(path);
     }
 }

@@ -3,9 +3,11 @@ using System.Collections;
 using System;
 
 [Serializable]
-public class UIPanelInfo :ISerializationCallbackReceiver {
+public class UIPanelInfo :ISerializationCallbackReceiver
+{
     [NonSerialized]
     public UIPanelType panelType;
+
     public string panelTypeString;
     //{
     //    get
