@@ -10,6 +10,8 @@ public class BasePanel : MonoBehaviour
         set { uiMgr = value; }
     }
 
+    
+
     /// <summary>
     /// 界面被显示出来
     /// </summary>
@@ -19,7 +21,7 @@ public class BasePanel : MonoBehaviour
     }
 
     /// <summary>
-    /// 界面暂停
+    /// 界面暂停  表示的当前的界面的上一个界面(加载下一个界面)
     /// </summary>
     public virtual void OnPause()
     {
@@ -27,7 +29,7 @@ public class BasePanel : MonoBehaviour
     }
 
     /// <summary>
-    /// 界面继续
+    /// 界面继续  表示的当前的界面的上一个界面(弹出上一个界面)
     /// </summary>
     public virtual void OnResume()
     {

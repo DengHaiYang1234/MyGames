@@ -64,7 +64,7 @@ public class UIManager :BaseManager{
         if (panelStack == null)
             panelStack = new Stack<BasePanel>();
 
-        //判断一下栈里面是否有页面
+        //判断一下栈里面是否有页面  
         if (panelStack.Count > 0)
         {
             BasePanel topPanel = panelStack.Peek();

@@ -1,34 +1,69 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
-using DG.Tweening;
+using UnityEngine.EventSystems;
+using System;
+
 
 public class MessagePanel : BasePanel
 {
-    private Text text;
+    //auto
+    private Text Txt_Message = null;
     private float showTime = 1f;
-
-    public override void OnEnter()
+    
+    public void Start()
     {
-        base.OnEnter();
-        text = GetComponent<Text>();
-        text.enabled = false;
-        uiMgr.MapingPanelByName<MessagePanel>(UIPanelType.Message, this);
-    }
+        Txt_Message = gameObject.transform.Find("Txt_Message").GetComponent<Text>();
 
+    }
 
 
     public void ShowMessage(string msg)
     {
-        text.text = msg;
-        text.enabled = true;
+        Txt_Message.text = msg;
+        Txt_Message.enabled = true;
         Invoke("Hide", showTime);
     }
 
     private void Hide()
     {
-        text.CrossFadeAlpha(0, 1, false);
+        Txt_Message.CrossFadeAlpha(0, 1, false);
     }
 
+
+    /// <summary>
+    /// 界面被显示出来
+    /// </summary>
+    public override void OnEnter()
+    {
+        base.OnEnter();
+        Txt_Message = gameObject.transform.Find("Txt_Message").GetComponent<Text>();
+        Txt_Message.enabled = false;
+        uiMgr.MapingPanelByName<MessagePanel>(UIPanelType.Message, this);
+    }
+
+    /// <summary>
+    /// 界面暂停  表示的当前的界面的上一个界面(加载下一个界面)
+    /// </summary>
+    public override void OnPause()
+    {
+        base.OnPause();
+    }
+
+    /// <summary>
+    /// 界面继续  表示的当前的界面的上一个界面(弹出上一个界面)
+    /// </summary>
+    public override void OnResume()
+    {
+        base.OnResume();
+    }
+
+    /// <summary>
+    /// 界面不显示,退出这个界面，界面被关系
+    /// </summary>
+    public override void OnExit()
+    {
+        base.OnExit();
+    }
+
+    //autoEnd
 }

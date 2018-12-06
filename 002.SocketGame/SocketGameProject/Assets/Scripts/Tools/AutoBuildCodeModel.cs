@@ -1,28 +1,27 @@
-﻿using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.EventSystems;
-using System;
-using DG.Tweening;
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
-
-public class StartPanel : BasePanel
+public class AutoBuildCodeModel
 {
-    //auto
-    private Button Btn_Login = null;
-
-    public void Start()
-    {
-        Btn_Login = gameObject.transform.Find("Btn_Login").GetComponent<Button>();
-        Btn_Login.onClick.AddListener(OnLoginClick);
-    }
-    
-    private void OnLoginClick()
-    {
-        uiMgr.PushPanel(UIPanelType.Login);
-    }
+    public static string UIClass =
+        @"using UnityEngine;
+          using UnityEngine.UI;
+          using UnityEngine.EventSystems;
+          using System;
 
 
-    /// <summary>
+        public class #类名#:MonoBehaviour
+            {
+	            //auto
+	            #成员#
+	            public void Start()
+	                {
+		                #查找#
+	                }
+
+
+                    /// <summary>
     /// 界面被显示出来
     /// </summary>
     public override void OnEnter()
@@ -36,10 +35,6 @@ public class StartPanel : BasePanel
     public override void OnPause()
     {
         base.OnPause();
-        transform.DOScale(0, 0.4f).OnComplete(() =>
-        {
-            gameObject.SetActive(false);
-        });
     }
 
     /// <summary>
@@ -48,8 +43,6 @@ public class StartPanel : BasePanel
     public override void OnResume()
     {
         base.OnResume();
-        gameObject.SetActive(true);
-        transform.DOScale(1, 0.4f);
     }
 
     /// <summary>
@@ -60,5 +53,8 @@ public class StartPanel : BasePanel
         base.OnExit();
     }
 
-    //autoEnd
+	            //autoEnd
+            }
+            ";
+
 }
