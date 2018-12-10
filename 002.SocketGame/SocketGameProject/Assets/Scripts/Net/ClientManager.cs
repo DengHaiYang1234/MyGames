@@ -58,9 +58,9 @@ public class ClientManager :BaseManager
         }
     }
 
-    private void OnProcessDataCallBack(RequestCode requsetCode,string data)
+    private void OnProcessDataCallBack(ActionCode actionCode, string data)
     {
-        GameFacade.Instance.HandleReponse(requsetCode, data);
+        GameFacade.Instance.HandleReponse(actionCode, data);
     }
 
     public void SendRequest(RequestCode requestCode,ActionCode actionCode,string data)
@@ -68,11 +68,7 @@ public class ClientManager :BaseManager
         byte[] bytes = Message.PackData(requestCode, actionCode, data);
         clientSocket.Send(bytes);
     }
-
-
-
-
-
+    
     public override void OnDestroy()
     {
         base.OnDestroy();

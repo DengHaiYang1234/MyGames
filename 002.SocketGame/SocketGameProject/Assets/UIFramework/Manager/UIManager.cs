@@ -138,6 +138,19 @@ public class UIManager :BaseManager{
         msgPanel.ShowMessage(msg);
     }
 
+    public void ShowMessageSync(string msg)
+    {
+        MessagePanel msgPanel = GetComponentByType(UIPanelType.Message) as MessagePanel;
+        if (msgPanel == null)
+        {
+            Debug.LogError("ShowMessage is Called But msgPanel == null");
+            return;
+        }
+        msgPanel.ShowMessageSync(msg);
+
+    }
+
+
     [Serializable]
     class UIPanelJson
     {

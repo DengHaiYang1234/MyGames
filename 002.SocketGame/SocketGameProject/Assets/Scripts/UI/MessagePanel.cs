@@ -9,6 +9,7 @@ public class MessagePanel : BasePanel
     //auto
     private Text Txt_Message = null;
     private float showTime = 1f;
+    private string message = null;
     
     public void Start()
     {
@@ -16,9 +17,25 @@ public class MessagePanel : BasePanel
 
     }
 
+    private void Update()
+    {
+        if (message != null)
+        {
+            ShowMessage(message);
+            message = null;
+        }
+    }
+
+    public void ShowMessageSync(string msg)
+    {
+        message = msg;
+    }
+
 
     public void ShowMessage(string msg)
     {
+        Txt_Message.CrossFadeAlpha(1, 0.2f, false);
+        Txt_Message.color = Color.white;
         Txt_Message.text = msg;
         Txt_Message.enabled = true;
         Invoke("Hide", showTime);
@@ -26,7 +43,7 @@ public class MessagePanel : BasePanel
 
     private void Hide()
     {
-        Txt_Message.CrossFadeAlpha(0, 1, false);
+        Txt_Message.CrossFadeAlpha(0, 0.2f, false);
     }
 
 

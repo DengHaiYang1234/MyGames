@@ -11,8 +11,7 @@ public class GameFacade : MonoBehaviour
     {
         get { return _instace; }
     }
-
-
+    
     private UIManager uiMgr;
     private RequestManager reqMgr;
     private CamreaManager camMgr;
@@ -54,25 +53,31 @@ public class GameFacade : MonoBehaviour
         clientMgr.OnInit();
     }
 
-    public void AddRequest(RequestCode requestCode,BaseRequest requset)
+    public void AddRequest(ActionCode actionCode, BaseRequest requset)
     {
-        reqMgr.AddRequest(requestCode, requset);
+        reqMgr.AddRequest(actionCode, requset);
     }
 
-    public void RemoveRequest(RequestCode requestCode)
+    public void RemoveRequest(ActionCode actionCode)
     {
-        reqMgr.RemoveRequset(requestCode);
+        reqMgr.RemoveRequset(actionCode);
     }
 
-    public void HandleReponse(RequestCode requestCode, string data)
+    public void HandleReponse(ActionCode actionCode, string data)
     {
-        reqMgr.HandleReponse(requestCode, data);
+        reqMgr.HandleReponse(actionCode, data);
     }
 
     public void ShowMessage(string msg)
     {
         uiMgr.ShowMessage(msg);
     }
+
+    public void SendRequest(RequestCode requestCode, ActionCode actionCode, string data)
+    {
+        clientMgr.SendRequest(requestCode, actionCode, data);
+    }
+
 
     private void OnDestroyManager()
     {

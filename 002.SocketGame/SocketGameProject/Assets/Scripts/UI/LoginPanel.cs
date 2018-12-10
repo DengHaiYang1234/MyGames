@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System;
 using DG.Tweening;
+using Common;
 
 public class LoginPanel : BasePanel
 {
@@ -16,6 +17,7 @@ public class LoginPanel : BasePanel
     private Button Btn_Login = null;
     private Button Btn_Register = null;
     private Button Btn_Close = null;
+    private LoginRequest loginRequest;
 
     public void Start()
     {
@@ -28,10 +30,48 @@ public class LoginPanel : BasePanel
         Btn_Login = gameObject.transform.Find("Btn_Login").GetComponent<Button>();
         Btn_Register = gameObject.transform.Find("Btn_Register").GetComponent<Button>();
         Btn_Close = gameObject.transform.Find("Btn_Close").GetComponent<Button>();
+        loginRequest = GetComponent<LoginRequest>();
+        Btn_Login.onClick.AddListener(OnLoginClick);
+        Btn_Register.onClick.AddListener(OnRegisterClick);
         Btn_Close.onClick.AddListener(OnClickClose);
     }
 
+    private void OnLoginClick()
+    {
+        string msg = "";
+        if (string.IsNullOrEmpty(Input_UserName.text))
+        {
+            msg += "用户名不能为空!";
+        }
+        if (string.IsNullOrEmpty(Input_PassWord.text))
+        {
+            msg += "密码不能为空!";
+        }
+        if (msg != "")
+        {
+            uiMgr.ShowMessage(msg);
+        }
 
+        loginRequest.SendRequest(Input_UserName.text, Input_PassWord.text);
+    }
+
+    public void OnLoginReponse(ReturnCode returnCode)
+    {
+        if (returnCode == ReturnCode.Success)
+        {
+            //TODO
+        }
+        else
+        {
+            uiMgr.ShowMessageSync("用户名或密码错误，请重新输入!!!!");
+
+        }
+    }
+
+    private void OnRegisterClick()
+    {
+        
+    }
 
     private void OnClickClose()
     {

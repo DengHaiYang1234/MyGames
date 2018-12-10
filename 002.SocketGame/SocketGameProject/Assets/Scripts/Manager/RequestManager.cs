@@ -11,24 +11,24 @@ public class RequestManager : BaseManager
     }
 
 
-    private Dictionary<RequestCode, BaseRequest> requestDict = new Dictionary<RequestCode, BaseRequest>();
+    private Dictionary<ActionCode, BaseRequest> actionDict = new Dictionary<ActionCode, BaseRequest>();
 
-    public void AddRequest(RequestCode requestCode,BaseRequest request)
+    public void AddRequest(ActionCode actionCode,BaseRequest request)
     {
-        requestDict.Add(requestCode, request);
+        actionDict.Add(actionCode, request);
     }
 
-    public void RemoveRequset(RequestCode requestCode)
+    public void RemoveRequset(ActionCode actionCode)
     {
-        requestDict.Remove(requestCode);
+        actionDict.Remove(actionCode);
     }
 
-    public void HandleReponse(RequestCode requestCode, string data)
+    public void HandleReponse(ActionCode actionCode, string data)
     {
-        BaseRequest request = requestDict.TryGetV<RequestCode, BaseRequest>(requestCode);
+        BaseRequest request = actionDict.TryGetV<ActionCode, BaseRequest>(actionCode);
         if (request == null)
         {
-            Debug.LogError("无法得到RequestCode[" + requestCode + "]对应的Request");
+            Debug.LogError("无法得到RequestCode[" + actionCode + "]对应的Request");
             return;
         }
         request.OnResponse(data);

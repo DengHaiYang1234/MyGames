@@ -79,9 +79,9 @@ namespace GameServer.Servers
         /// <param name="client"></param>
         /// <param name="requestCode"></param>
         /// <param name="data"></param>
-        public void SendResponse(Client client,RequestCode requestCode,string data)
+        public void SendResponse(Client client,ActionCode actionCode, string data)
         {
-            client.Send(requestCode, data);
+            client.Send(actionCode, data);
         }
 
         /// <summary>

@@ -33,6 +33,11 @@ namespace GameServer.Servers
             mySqlConnection = ConnHelper.Connect();
         }
 
+        public MySqlConnection MySqlConnection
+        {
+            get { return mySqlConnection; }
+        }
+
         /// <summary>
         /// 开始接收消息
         /// </summary>
@@ -53,8 +58,7 @@ namespace GameServer.Servers
                 {
                     Close();
                 }
-
-
+                
                 msg.ReadMessage(count,OnProcessMessage);  //获取客户端的消息之后。是否需要回复客户端请求
 
                 //TODO 处理接收到的数据
@@ -92,9 +96,9 @@ namespace GameServer.Servers
         /// </summary>
         /// <param name="requestCode"></param>
         /// <param name="data"></param>
-        public void Send(RequestCode requestCode, string data)
+        public void Send(ActionCode actionCode, string data)
         {
-            byte[] bytes = Message.PackData(requestCode, data);
+            byte[] bytes = Message.PackData(actionCode, data);
             clientSocket.Send(bytes);
         }
     }

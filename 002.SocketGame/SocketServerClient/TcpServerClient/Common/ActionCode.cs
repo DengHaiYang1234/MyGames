@@ -10,5 +10,7 @@ namespace Common
     public enum ActionCode
     {
         Node,
+        Login,
+        Register,
     }
 }
