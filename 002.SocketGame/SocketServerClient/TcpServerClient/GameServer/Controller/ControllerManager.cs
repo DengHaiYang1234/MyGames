@@ -33,7 +33,7 @@ namespace GameServer.Controller
         }
 
         /// <summary>
-        /// 处理消息后回复
+        /// 消息处理
         /// </summary>
         /// <param name="requestCode"></param>
         /// <param name="actionCode"></param>
@@ -60,6 +60,7 @@ namespace GameServer.Controller
             }
             //传递对象方法参数，并开始执行方法
             object[] parameters = new object[] {data,client,server};
+            //调用方法处理消息
             object o =  mi.Invoke(controller, parameters);
 
             if (o == null || string.IsNullOrEmpty(o as string))
@@ -67,7 +68,7 @@ namespace GameServer.Controller
                 return;
             }
 
-            //请求已处理。处理请求后的回复
+            //请求已处理。返回消息处理结果
             server.SendResponse(client, actionCode, o as string);
         }
     }

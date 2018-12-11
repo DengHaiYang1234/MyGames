@@ -30,6 +30,10 @@ public class BaseRequest : MonoBehaviour
         
     }
 
+    /// <summary>
+    /// 由子类重写    服务器消息返回结果
+    /// </summary>
+    /// <param name="data"></param>
     public virtual void OnResponse(string data)
     {
         

@@ -4,13 +4,22 @@ using System.Collections;
 public class BasePanel : MonoBehaviour
 {
     protected UIManager uiMgr;
+    private GameFacade facade;
 
     public UIManager UIMgr
     {
         set { uiMgr = value; }
     }
 
-    
+    public GameFacade Facade
+    {
+        set { facade = value; }
+    }
+
+    protected void PlayClickSound()
+    {
+        facade.PlayNoramSound(AudioMAnager.Sound_ButtonClick,1f,false);
+    }
 
     /// <summary>
     /// 界面被显示出来

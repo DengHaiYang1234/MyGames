@@ -5,6 +5,9 @@ using System;
 using LitJson;
 using System.IO;
 
+/// <summary>
+/// 管理所有UI
+/// </summary>
 public class UIManager :BaseManager{
 
     /// 
@@ -16,8 +19,6 @@ public class UIManager :BaseManager{
     {
         ParseUIPanelTypeJson();
     }
-
-
 
     private Transform canvasTransform;
     private Transform CanvasTransform
@@ -53,9 +54,7 @@ public class UIManager :BaseManager{
     {
         return panelMap.TryGetV<UIPanelType, Component>(panelType);
     }
-
-
-
+    
     /// <summary>
     /// 把某个页面入栈，  把某个页面显示在界面上
     /// </summary>
@@ -92,7 +91,6 @@ public class UIManager :BaseManager{
         if (panelStack.Count <= 0) return;
         BasePanel topPanel2 = panelStack.Peek();
         topPanel2.OnResume();
-
     }
 
     /// <summary>
@@ -116,7 +114,8 @@ public class UIManager :BaseManager{
             string path = panelPathDict.TryGetV(panelType);
             GameObject instPanel = GameObject.Instantiate(Resources.Load(path)) as GameObject;
             instPanel.transform.SetParent(CanvasTransform,false);
-            instPanel.GetComponent<BasePanel>().UIMgr = this;
+            instPanel.GetComponent<BasePanel>().UIMgr = this; //让所有派生类持有UIManager
+            instPanel.GetComponent<BasePanel>().Facade = gameFacade;//让所有派生类持有GameFacade
             panelDict.Add(panelType, instPanel.GetComponent<BasePanel>());
             return instPanel.GetComponent<BasePanel>();
         }
@@ -125,8 +124,7 @@ public class UIManager :BaseManager{
             return panel;
         }
     }
-
-
+    
     public void ShowMessage(string msg)
     {
         MessagePanel msgPanel = GetComponentByType(UIPanelType.Message) as MessagePanel;
@@ -149,8 +147,7 @@ public class UIManager :BaseManager{
         msgPanel.ShowMessageSync(msg);
 
     }
-
-
+    
     [Serializable]
     class UIPanelJson
     {

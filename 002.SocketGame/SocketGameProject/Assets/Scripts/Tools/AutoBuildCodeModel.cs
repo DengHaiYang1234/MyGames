@@ -6,22 +6,29 @@ public class AutoBuildCodeModel
 {
     public static string UIClass =
         @"using UnityEngine;
-          using UnityEngine.UI;
-          using UnityEngine.EventSystems;
-          using System;
+using UnityEngine.UI;
+using UnityEngine.EventSystems;
+using System;
 
 
-        public class #类名#:MonoBehaviour
-            {
-	            //auto
-	            #成员#
-	            public void Start()
-	                {
-		                #查找#
-	                }
+public class #类名#:MonoBehaviour
+{
+    //auto
+    #成员#
+    public void Start()
+    {
+        #查找#
+    }
+
+    private void AddClicks()
+    {
+        #AddListener#
+    }
 
 
-                    /// <summary>
+    #CallBack#
+
+    /// <summary>
     /// 界面被显示出来
     /// </summary>
     public override void OnEnter()
@@ -53,8 +60,8 @@ public class AutoBuildCodeModel
         base.OnExit();
     }
 
-	            //autoEnd
-            }
+    //autoEnd
+}
             ";
 
 }

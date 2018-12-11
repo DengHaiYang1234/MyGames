@@ -38,6 +38,7 @@ public class LoginPanel : BasePanel
 
     private void OnLoginClick()
     {
+        PlayClickSound();
         string msg = "";
         if (string.IsNullOrEmpty(Input_UserName.text))
         {
@@ -70,11 +71,13 @@ public class LoginPanel : BasePanel
 
     private void OnRegisterClick()
     {
-        
+        PlayClickSound();
+        uiMgr.PushPanel(UIPanelType.Register);
     }
 
     private void OnClickClose()
     {
+        PlayClickSound();
         Tweener tween = transform.DOLocalMove(new Vector3(1000, 0, 0), 0.2f);
         tween.OnComplete(() =>
         {

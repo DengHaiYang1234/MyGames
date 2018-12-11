@@ -2,6 +2,9 @@
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System;
+using DG.Tweening;
+using Common;
+
 
 public class RegistPanel : BasePanel
 {
@@ -17,6 +20,7 @@ public class RegistPanel : BasePanel
     private Text Txt_RePassWordPlaceholder = null;
     private Text Txt_RePassWordText = null;
     private Button Btn_Close = null;
+    private RegistRequest registRequest;
 
     public void Start()
     {
@@ -31,9 +35,66 @@ public class RegistPanel : BasePanel
         Txt_RePassWordPlaceholder = gameObject.transform.Find("RePassWord/Input_RePassWord/Txt_RePassWordPlaceholder").GetComponent<Text>();
         Txt_RePassWordText = gameObject.transform.Find("RePassWord/Input_RePassWord/Txt_RePassWordText").GetComponent<Text>();
         Btn_Close = gameObject.transform.Find("Btn_Close").GetComponent<Button>();
+        registRequest = GetComponent<RegistRequest>();
+        AddClicks();
+    }
+
+    private void AddClicks()
+    {
+        Btn_Register.onClick.AddListener(OnRegisterClick);
+        Btn_Close.onClick.AddListener(OnCloseClick);
 
     }
 
+
+    private void OnRegisterClick()
+    {
+        PlayClickSound();
+        string msg = "";
+        if (string.IsNullOrEmpty(Input_UserName.text))
+        {
+            msg += "用户名不能为空！";
+        }
+        if (string.IsNullOrEmpty(Input_PassWord.text))
+        {
+            msg += "\n密码不能为空!";
+        }
+        if (string.IsNullOrEmpty(Input_RePassWord.text))
+        {
+            msg += "\n密码不一致!";
+        }
+
+        if (msg == "")
+        {
+            registRequest.SendRequest(Input_UserName.text, Input_PassWord.text);
+        }
+        else
+        {
+            uiMgr.ShowMessage(msg);
+            return;
+        }
+    }
+    private void OnCloseClick()
+    {
+        PlayClickSound();
+        Tweener tween = transform.DOLocalMove(new Vector3(1000, 0, 0), 0.2f);
+        tween.OnComplete(() =>
+        {
+            uiMgr.PopPanel();
+        });
+    }
+
+    public void OnRegistReponse(ReturnCode returnCode)
+    {
+        if (returnCode == ReturnCode.Success)
+        {
+            uiMgr.ShowMessageSync("注册成功!!!!");
+        }
+        else
+        {
+            uiMgr.ShowMessageSync("用户名重复!!!!");
+        }
+    }
 
     /// <summary>
     /// 界面被显示出来
@@ -41,6 +102,11 @@ public class RegistPanel : BasePanel
     public override void OnEnter()
     {
         base.OnEnter();
+        gameObject.SetActive(true);
+        transform.localScale = Vector3.zero;
+        transform.DOScale(1, 0.2f);
+        transform.localPosition = new Vector3(1000, 0, 0);
+        transform.DOLocalMove(Vector3.zero, 0.2f);
     }
 
     /// <summary>
@@ -65,6 +131,7 @@ public class RegistPanel : BasePanel
     public override void OnExit()
     {
         base.OnExit();
+        gameObject.SetActive(false);
     }
 
     //autoEnd

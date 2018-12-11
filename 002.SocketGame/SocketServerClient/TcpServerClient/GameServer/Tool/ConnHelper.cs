@@ -13,7 +13,7 @@ namespace GameServer.Tool
 
         public static MySqlConnection Connect()
         {
-            MySqlConnection conn = new MySqlConnection(CONNECTIONSTRING);
+            MySqlConnection conn = new MySqlConnection(CONNECTIONSTRING); //连接数据库
             try
             {
                 conn.Open();

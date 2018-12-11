@@ -55,8 +55,8 @@ namespace GameServer.Servers
         /// <param name="ar"></param>
         public void AcceptCallBack(IAsyncResult ar)
         {
-            Socket clientSocket = serverSocket.EndAccept(ar);
-            Client client = new Client(clientSocket,this);
+            Socket clientSocket = serverSocket.EndAccept(ar); //接收到的客户端请求
+            Client client = new Client(clientSocket,this);  //单个处理客户端的请求
             client.Start();
             clientList.Add(client);
         }
@@ -85,7 +85,7 @@ namespace GameServer.Servers
         }
 
         /// <summary>
-        /// 回复客户端请求
+        /// 消息处理
         /// </summary>
         /// <param name="requestCode"></param>
         /// <param name="actionCode"></param>

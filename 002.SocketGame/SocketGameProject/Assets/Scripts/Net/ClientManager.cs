@@ -27,10 +27,10 @@ public class ClientManager :BaseManager
         base.OnInit(); //父类方法执行
 
 
-        clientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+        clientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);  //建立Socket
         try
         {
-            clientSocket.Connect(IP, PORT);
+            clientSocket.Connect(IP, PORT); //连接Socket
             Start();
         }
         catch(Exception e)
@@ -39,16 +39,24 @@ public class ClientManager :BaseManager
         }
     }
 
+    /// <summary>
+    /// 启动Socket并开始接收消息
+    /// </summary>
     private void Start()
     {
         clientSocket.BeginReceive(msg.Data,msg.StartIndex,msg.RemainSize, SocketFlags.None,ReceiveCallBack,null);
     }
-
+    /// <summary>
+    /// 消息回调
+    /// </summary>
+    /// <param name="ar"></param>
     private void ReceiveCallBack(IAsyncResult ar)
     {
         try
         {
+            //接收到的消息长度
             int count = clientSocket.EndReceive(ar);
+            //解析消息
             msg.ReadMessage(count,OnProcessDataCallBack);
             Start();
         }
@@ -58,6 +66,11 @@ public class ClientManager :BaseManager
         }
     }
 
+    /// <summary>
+    /// 解析消息回调
+    /// </summary>
+    /// <param name="actionCode"> 调用方法 </param>
+    /// <param name="data"> 服务器返回结果 </param>
     private void OnProcessDataCallBack(ActionCode actionCode, string data)
     {
         GameFacade.Instance.HandleReponse(actionCode, data);

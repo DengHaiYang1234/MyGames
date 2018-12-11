@@ -80,10 +80,19 @@ dicUIType.Keys.Contains(trans.name.Split('_')[0])
 
             string loadedcontant = "";
 
+            string function = "";
+
+            string addListenerString = "";
+
+            List<string> btns = new List<string>();
+
             //创建并初始化变量
             foreach (Transform itemtran in mainNode)
             {
                 string typeStr = dicUIType[itemtran.name.Split('_')[0]];
+
+                if (typeStr == "Button")
+                    btns.Add(itemtran.name);
 
                 memberstring += "private " + typeStr + " " + itemtran.name + " = null;\r\n\t";  //根据既定的类型创建对应变量类型
 
@@ -91,6 +100,13 @@ dicUIType.Keys.Contains(trans.name.Split('_')[0])
                 loadedcontant += itemtran.name + " = " + "gameObject.transform.Find(\"" + nodePathList[itemtran.name] + "\").GetComponent<" + typeStr + ">();\r\n\t\t";
             }
 
+            foreach (var btn in btns)
+            {
+                string funcName = "On" + btn.Split('_')[1] + "Click";
+                function += "private void " + funcName + "(){\r\n\t} \r\n\t";
+                addListenerString += btn + ".onClick.AddListener(" + funcName + ");\r\n\t";
+            }
+            
             //code创建路径
             string scriptPath = Application.dataPath + "/Scripts/" + selectObj.name + ".cs";
 
@@ -140,6 +156,10 @@ dicUIType.Keys.Contains(trans.name.Split('_')[0])
             classStr = classStr.Replace("#查找#", loadedcontant);
             //创建全局变量
             classStr = classStr.Replace("#成员#", memberstring);
+            //创建按钮回调方法
+            classStr = classStr.Replace("#CallBack#",function);
+            //添加按钮监听事件
+            classStr = classStr.Replace("#AddListener#", addListenerString);
 
             //写入完成
             FileStream file = new FileStream(scriptPath, FileMode.CreateNew);

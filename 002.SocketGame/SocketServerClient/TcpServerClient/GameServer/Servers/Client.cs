@@ -20,7 +20,6 @@ namespace GameServer.Servers
         private Message msg = new Message(); //消息处理
         private MySqlConnection mySqlConnection;
 
-
         public Client()
         {
             
@@ -30,8 +29,8 @@ namespace GameServer.Servers
         {
             this.clientSocket = clientSocket;
             this.server = server;
-            mySqlConnection = ConnHelper.Connect();
-        }
+            mySqlConnection = ConnHelper.Connect(); //建立数据库的连接并持有数据库的引用
+        } 
 
         public MySqlConnection MySqlConnection
         {
@@ -59,9 +58,8 @@ namespace GameServer.Servers
                     Close();
                 }
                 
-                msg.ReadMessage(count,OnProcessMessage);  //获取客户端的消息之后。是否需要回复客户端请求
-
-                //TODO 处理接收到的数据
+                msg.ReadMessage(count,OnProcessMessage);  //解析数据。并做消息回调
+                    
                 Start();
             }
             catch (Exception e)
@@ -72,7 +70,7 @@ namespace GameServer.Servers
         }
 
         /// <summary>
-        /// 回复客户端请求
+        /// 消息处理回调
         /// </summary>
         /// <param name="requestCode"></param>
         /// <param name="actionCode"></param>

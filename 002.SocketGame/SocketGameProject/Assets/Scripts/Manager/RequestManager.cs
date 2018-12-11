@@ -23,6 +23,11 @@ public class RequestManager : BaseManager
         actionDict.Remove(actionCode);
     }
 
+    /// <summary>
+    /// 获取对应BaseRequest的调用方法
+    /// </summary>
+    /// <param name="actionCode"></param>
+    /// <param name="data"></param>
     public void HandleReponse(ActionCode actionCode, string data)
     {
         BaseRequest request = actionDict.TryGetV<ActionCode, BaseRequest>(actionCode);

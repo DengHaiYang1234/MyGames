@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using Common;
 
+/// <summary>
+/// 相当于是一个中介的作用。持有所有的Manager的引用
+/// </summary>
 public class GameFacade : MonoBehaviour
 {
     private static GameFacade _instace;
@@ -34,8 +37,9 @@ public class GameFacade : MonoBehaviour
         InitManager();
     }
 
-    
-
+    /// <summary>
+    /// 初始化所有Manager
+    /// </summary>
     private void InitManager()
     {
         uiMgr = new UIManager(this);
@@ -78,6 +82,16 @@ public class GameFacade : MonoBehaviour
         clientMgr.SendRequest(requestCode, actionCode, data);
     }
 
+    public void PlayBgSound(string sound)
+    {
+        audMgr.PlayBgSound(sound);
+    }
+
+    public void PlayNoramSound(string sound,float volume,bool loop)
+    {
+        audMgr.PlayNoramSound(sound,volume,loop);
+    }
+
 
     private void OnDestroyManager()
     {
@@ -88,10 +102,7 @@ public class GameFacade : MonoBehaviour
         playerMgr.OnDestroy();
         clientMgr.OnDestroy();
     }
-
-
-
-
+    
     private void OnDestroy()
     {
         OnDestroyManager();
