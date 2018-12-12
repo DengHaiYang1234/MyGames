@@ -8,7 +8,8 @@ using System.IO;
 /// <summary>
 /// 管理所有UI
 /// </summary>
-public class UIManager :BaseManager{
+public class UIManager :BaseManager
+{
 
     /// 
     /// 单例模式的核心
@@ -36,6 +37,7 @@ public class UIManager :BaseManager{
     private Dictionary<UIPanelType, BasePanel> panelDict;//保存所有实例化面板的游戏物体身上的BasePanel组件
     private Dictionary<UIPanelType, Component> panelMap = new Dictionary<UIPanelType, Component>();
     private Stack<BasePanel> panelStack;
+    private UIPanelType panelTypeToPush = UIPanelType.None;
 
 
     public override void OnInit()
@@ -43,6 +45,16 @@ public class UIManager :BaseManager{
         base.OnInit();
         PushPanel(UIPanelType.Message);
         PushPanel(UIPanelType.Start);
+    }
+
+    public override void Update()
+    {
+        base.Update();
+        if (panelTypeToPush != UIPanelType.None)
+        {
+            PushPanel(panelTypeToPush);
+            panelTypeToPush = UIPanelType.None;
+        }
     }
 
     public void MapingPanelByName<T>(UIPanelType panelType,T panel) where T : Component
@@ -74,6 +86,11 @@ public class UIManager :BaseManager{
         panel.OnEnter();
         panelStack.Push(panel);
     }
+
+    public void PushPanelSync(UIPanelType panelType)
+    {
+        panelTypeToPush = panelType;
+    }
     /// <summary>
     /// 出栈 ，把页面从界面上移除
     /// </summary>
@@ -92,6 +109,8 @@ public class UIManager :BaseManager{
         BasePanel topPanel2 = panelStack.Peek();
         topPanel2.OnResume();
     }
+
+
 
     /// <summary>
     /// 根据面板类型 得到实例化的面板

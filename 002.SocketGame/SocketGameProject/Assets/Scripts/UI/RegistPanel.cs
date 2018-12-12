@@ -77,11 +77,12 @@ public class RegistPanel : BasePanel
     private void OnCloseClick()
     {
         PlayClickSound();
-        Tweener tween = transform.DOLocalMove(new Vector3(1000, 0, 0), 0.2f);
-        tween.OnComplete(() =>
-        {
-            uiMgr.PopPanel();
-        });
+        uiMgr.PopPanel();
+        //Tweener tween = transform.DOLocalMove(new Vector3(1000, 0, 0), 0.2f);
+        //tween.OnComplete(() =>
+        //{
+        //    uiMgr.PopPanel();
+        //});
     }
 
     public void OnRegistReponse(ReturnCode returnCode)
@@ -102,11 +103,11 @@ public class RegistPanel : BasePanel
     public override void OnEnter()
     {
         base.OnEnter();
-        gameObject.SetActive(true);
-        transform.localScale = Vector3.zero;
-        transform.DOScale(1, 0.2f);
-        transform.localPosition = new Vector3(1000, 0, 0);
-        transform.DOLocalMove(Vector3.zero, 0.2f);
+        //gameObject.SetActive(true);
+        //transform.localScale = Vector3.zero;
+        //transform.DOScale(1, 0.2f);
+        //transform.localPosition = new Vector3(1000, 0, 0);
+        //transform.DOLocalMove(Vector3.zero, 0.2f);
     }
 
     /// <summary>
@@ -131,7 +132,7 @@ public class RegistPanel : BasePanel
     public override void OnExit()
     {
         base.OnExit();
-        gameObject.SetActive(false);
+        //gameObject.SetActive(false);
     }
 
     //autoEnd

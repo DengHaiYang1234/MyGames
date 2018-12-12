@@ -37,6 +37,11 @@ public class GameFacade : MonoBehaviour
         InitManager();
     }
 
+    private void Update()
+    {
+        UpdateManager();
+    }
+
     /// <summary>
     /// 初始化所有Manager
     /// </summary>
@@ -55,6 +60,16 @@ public class GameFacade : MonoBehaviour
         audMgr.OnInit();
         playerMgr.OnInit();
         clientMgr.OnInit();
+    }
+
+    private void UpdateManager()
+    {
+        uiMgr.Update();
+        reqMgr.Update();
+        camMgr.Update();
+        audMgr.Update();
+        playerMgr.Update();
+        clientMgr.Update();
     }
 
     public void AddRequest(ActionCode actionCode, BaseRequest requset)

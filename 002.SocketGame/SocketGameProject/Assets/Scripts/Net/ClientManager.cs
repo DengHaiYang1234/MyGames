@@ -54,6 +54,10 @@ public class ClientManager :BaseManager
     {
         try
         {
+            if (clientSocket == null || clientSocket.Connected == false)
+            {
+                return;
+            }
             //接收到的消息长度
             int count = clientSocket.EndReceive(ar);
             //解析消息
@@ -62,7 +66,7 @@ public class ClientManager :BaseManager
         }
         catch(Exception e)
         {
-            Debug.LogError(e);
+            Debug.LogError("ClientManager ReceiveCallBack is Called.But " + e);
         }
     }
 

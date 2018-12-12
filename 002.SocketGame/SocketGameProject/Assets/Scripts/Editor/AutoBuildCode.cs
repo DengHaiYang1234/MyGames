@@ -21,8 +21,8 @@ public class AutoBuildCode
         dicUIType.Add("Txt", "Text");
         dicUIType.Add("Tran", "Transform");
         dicUIType.Add("Input", "InputField");
-        
-
+        dicUIType.Add("Scroll", "ScrollRect");
+        dicUIType.Add("Scrollbar", "Scrollbar");
         GameObject[] selectObjs = Selection.gameObjects;
         foreach (GameObject go in selectObjs)
         {
@@ -98,7 +98,10 @@ dicUIType.Keys.Contains(trans.name.Split('_')[0])
 
                 //根据既定的类型找到该obj的GetComponent
                 loadedcontant += itemtran.name + " = " + "gameObject.transform.Find(\"" + nodePathList[itemtran.name] + "\").GetComponent<" + typeStr + ">();\r\n\t\t";
+
             }
+
+            loadedcontant += "AddClicks();";
 
             foreach (var btn in btns)
             {

@@ -42,6 +42,7 @@ namespace GameServer.Servers
         /// </summary>
         public void Start()
         {
+            if (clientSocket == null || clientSocket.Connected == false) return;
             clientSocket.BeginReceive(msg.Data, msg.StartIndex, msg.RemainSize, SocketFlags.None, ReceiveCallBack,null);
         }
         /// <summary>
@@ -52,6 +53,7 @@ namespace GameServer.Servers
         {
             try
             {
+                if (clientSocket == null || clientSocket.Connected == false) return;
                 int count = clientSocket.EndReceive(ar); //消息的字节数量
                 if (count == 0)
                 {

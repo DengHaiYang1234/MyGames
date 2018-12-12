@@ -36,7 +36,6 @@ public class StartPanel : BasePanel
     /// </summary>
     public override void OnPause()
     {
-        base.OnPause();
         transform.DOScale(0, 0.4f).OnComplete(() =>
         {
             gameObject.SetActive(false);

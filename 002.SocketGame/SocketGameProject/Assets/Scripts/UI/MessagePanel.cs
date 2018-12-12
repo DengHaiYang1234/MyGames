@@ -46,7 +46,6 @@ public class MessagePanel : BasePanel
         Txt_Message.CrossFadeAlpha(0, 0.2f, false);
     }
 
-
     /// <summary>
     /// 界面被显示出来
     /// </summary>
@@ -63,7 +62,7 @@ public class MessagePanel : BasePanel
     /// </summary>
     public override void OnPause()
     {
-        base.OnPause();
+        //base.OnPause();
     }
 
     /// <summary>
@@ -79,7 +78,7 @@ public class MessagePanel : BasePanel
     /// </summary>
     public override void OnExit()
     {
-        base.OnExit();
+        //base.OnExit();
     }
 
     //autoEnd

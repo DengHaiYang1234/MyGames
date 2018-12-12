@@ -31,6 +31,7 @@ public class LoginPanel : BasePanel
         Btn_Register = gameObject.transform.Find("Btn_Register").GetComponent<Button>();
         Btn_Close = gameObject.transform.Find("Btn_Close").GetComponent<Button>();
         loginRequest = GetComponent<LoginRequest>();
+
         Btn_Login.onClick.AddListener(OnLoginClick);
         Btn_Register.onClick.AddListener(OnRegisterClick);
         Btn_Close.onClick.AddListener(OnClickClose);
@@ -60,7 +61,7 @@ public class LoginPanel : BasePanel
     {
         if (returnCode == ReturnCode.Success)
         {
-            //TODO
+            uiMgr.PushPanelSync(UIPanelType.Room);
         }
         else
         {
@@ -78,11 +79,14 @@ public class LoginPanel : BasePanel
     private void OnClickClose()
     {
         PlayClickSound();
-        Tweener tween = transform.DOLocalMove(new Vector3(1000, 0, 0), 0.2f);
-        tween.OnComplete(() =>
-        {
-            uiMgr.PopPanel();
-        });
+
+        uiMgr.PopPanel();
+
+        //Tweener tween = transform.DOLocalMove(new Vector3(1000, 0, 0), 0.2f);
+        //tween.OnComplete(() =>
+        //{
+        //    uiMgr.PopPanel();
+        //});
     }
 
 
@@ -92,12 +96,11 @@ public class LoginPanel : BasePanel
     public override void OnEnter()
     {
         base.OnEnter();
-        base.OnEnter();
-        gameObject.SetActive(true);
-        transform.localScale = Vector3.zero;
-        transform.DOScale(1, 0.2f);
-        transform.localPosition = new Vector3(1000, 0, 0);
-        transform.DOLocalMove(Vector3.zero, 0.2f);
+        //gameObject.SetActive(true);
+        //transform.localScale = Vector3.zero;
+        //transform.DOScale(1, 0.2f);
+        //transform.localPosition = new Vector3(1000, 0, 0);
+        //transform.DOLocalMove(Vector3.zero, 0.2f);
     }
 
     /// <summary>
@@ -106,6 +109,11 @@ public class LoginPanel : BasePanel
     public override void OnPause()
     {
         base.OnPause();
+        //Tweener tween = transform.DOLocalMove(new Vector3(1000, 0, 0), 0.2f);
+        //tween.OnComplete(() =>
+        //{
+        //    uiMgr.PopPanel();
+        //});
     }
 
     /// <summary>
@@ -122,8 +130,6 @@ public class LoginPanel : BasePanel
     public override void OnExit()
     {
         base.OnExit();
-        base.OnExit();
-        gameObject.SetActive(false);
     }
 
     //autoEnd
