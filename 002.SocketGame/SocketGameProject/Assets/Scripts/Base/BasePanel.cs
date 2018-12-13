@@ -5,7 +5,7 @@ using DG.Tweening;
 public class BasePanel : MonoBehaviour
 {
     protected UIManager uiMgr;
-    private GameFacade facade;
+    protected GameFacade facade;
 
     protected BasePanel panel;
 

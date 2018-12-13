@@ -26,18 +26,18 @@ public class AutoBuildCode
         GameObject[] selectObjs = Selection.gameObjects;
         foreach (GameObject go in selectObjs)
         {
-            string panelName = go.name;
-            if (panelName.IndexOf("Panel") == -1)
-            {
-                Debug.LogError("BuildUIScript is Called. but panelName.IndexOf(Panel) == -1");
-                return;
-            }
+            //string panelName = go.name;
+            //if (panelName.IndexOf("Panel") == -1)
+            //{
+            //    Debug.LogError("BuildUIScript is Called. but panelName.IndexOf(Panel) == -1");
+            //    return;
+            //}
 
-            if (panelName.Substring(panelName.IndexOf("Panel")) != "Panel")
-            {
-                Debug.LogError("BuildUIScript is Called. (panelName.Substring(panelName.IndexOf(Panel)) != Panel)");
-                return;
-            }
+            //if (panelName.Substring(panelName.IndexOf("Panel")) != "Panel")
+            //{
+            //    Debug.LogError("BuildUIScript is Called. (panelName.Substring(panelName.IndexOf(Panel)) != Panel)");
+            //    return;
+            //}
 
             //transform.root  返回最高级
             GameObject selectObj = go.transform.gameObject;
@@ -55,25 +55,47 @@ dicUIType.Keys.Contains(trans.name.Split('_')[0])
 
             //保存每个符合条件的obj所对应的path
             var nodePathList = new Dictionary<string, string>();
+            List<string> CollectEqualName = new List<string>();
+            bool isErr = false;
 
             foreach (Transform node in mainNode)
             {
-                Transform tempNode = node;
-                string nodePath = "/" + tempNode.name;
-                while (tempNode != selectObj.transform) //补充该obj在selectObj下的完整路径
+                try
                 {
-                    tempNode = tempNode.parent;
-                    int index = nodePath.IndexOf('/');
-                    if (tempNode.name != selectObj.name)
+                    Transform tempNode = node;
+                    string nodePath = "/" + tempNode.name;
+                    while (tempNode != selectObj.transform) //补充该obj在selectObj下的完整路径
                     {
-                        nodePath = nodePath.Insert(index, "/" + tempNode.name);
+                        tempNode = tempNode.parent;
+                        int index = nodePath.IndexOf('/');
+                        if (tempNode.name != selectObj.name)
+                        {
+                            nodePath = nodePath.Insert(index, "/" + tempNode.name);
+                        }
+                        else
+                        {
+                            nodePath = nodePath.Substring(nodePath.IndexOf('/') + 1);
+                        }
                     }
-                    else
+
+                    if (nodePathList.ContainsKey(node.name))
                     {
-                        nodePath = nodePath.Substring(nodePath.IndexOf('/') + 1);
+                        isErr = true;
+                        Debug.LogError(string.Format("同名同路径。请检查! 名称:{0},路径:{1}", node.name, nodePath));
                     }
+                    nodePathList.Add(node.name, nodePath);
                 }
-                nodePathList.Add(node.name, nodePath);
+                catch (Exception e)
+                {
+                    isErr = true;
+                    Debug.LogError(string.Format("Err:{0}--------Exception:{1}",node,e));
+                }
+            }
+
+            if (isErr)
+            {
+                Debug.LogError("有错误。请检查报错");
+                return;
             }
 
             string memberstring = "";
@@ -98,7 +120,7 @@ dicUIType.Keys.Contains(trans.name.Split('_')[0])
 
                 //根据既定的类型找到该obj的GetComponent
                 loadedcontant += itemtran.name + " = " + "gameObject.transform.Find(\"" + nodePathList[itemtran.name] + "\").GetComponent<" + typeStr + ">();\r\n\t\t";
-
+                
             }
 
             loadedcontant += "AddClicks();";

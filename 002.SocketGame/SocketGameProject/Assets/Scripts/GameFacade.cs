@@ -108,6 +108,16 @@ public class GameFacade : MonoBehaviour
     }
 
 
+    public void SetUserData(UserData userData)
+    {
+        playerMgr.UserData = userData;
+    }
+
+    public UserData GetUserData()
+    {
+        return playerMgr.UserData;
+    }
+
     private void OnDestroyManager()
     {
         uiMgr.OnDestroy();

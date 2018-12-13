@@ -12,5 +12,8 @@ namespace Common
         Node,
         Login,
         Register,
+        ListRoom,
+        CreatRoom,
+        JoinRoom,
     }
 }

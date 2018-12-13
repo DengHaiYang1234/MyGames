@@ -18,6 +18,7 @@ namespace GameServer.Servers
         private IPEndPoint ipEndPoint;
         private Socket serverSocket; //服务器端
         private List<Client> clientList; //管理所有连接的客户端
+        private List<Room> roomList = new List<Room>();
         private ControllerManager controllerManager;
 
         public Server()

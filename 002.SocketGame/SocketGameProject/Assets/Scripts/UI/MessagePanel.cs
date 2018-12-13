@@ -51,7 +51,7 @@ public class MessagePanel : BasePanel
     /// </summary>
     public override void OnEnter()
     {
-        base.OnEnter();
+        //base.OnEnter();
         Txt_Message = gameObject.transform.Find("Txt_Message").GetComponent<Text>();
         Txt_Message.enabled = false;
         uiMgr.MapingPanelByName<MessagePanel>(UIPanelType.Message, this);
@@ -70,7 +70,7 @@ public class MessagePanel : BasePanel
     /// </summary>
     public override void OnResume()
     {
-        base.OnResume();
+        //base.OnResume();
     }
 
     /// <summary>
