@@ -47,6 +47,17 @@ namespace GameServer.Servers
             serverSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             serverSocket.Bind(ipEndPoint);
             serverSocket.Listen(0);
+
+            try
+            {
+                Console.WriteLine("服务器启动成功");
+                Console.WriteLine("===============================");
+            }
+            catch
+            {
+                Console.WriteLine("服务器启动失败！");
+            }
+
             serverSocket.BeginAccept(AcceptCallBack,null); //异步接收客户端连接
         }
 
@@ -57,9 +68,12 @@ namespace GameServer.Servers
         public void AcceptCallBack(IAsyncResult ar)
         {
             Socket clientSocket = serverSocket.EndAccept(ar); //接收到的客户端请求
+            IPEndPoint ipEndPot = clientSocket.RemoteEndPoint as IPEndPoint;
+            Console.WriteLine("====IP:{0}【{1}】连接成功====", ipEndPot.Address, ipEndPot.Port);
             Client client = new Client(clientSocket,this);  //单个处理客户端的请求
             client.Start();
             clientList.Add(client);
+            serverSocket.BeginAccept(AcceptCallBack, null);
         }
 
         /// <summary>
@@ -94,6 +108,13 @@ namespace GameServer.Servers
         public void HandlerRequest(RequestCode requestCode, ActionCode actionCode, string data, Client client)
         {
             controllerManager.HandleRequest(requestCode, actionCode, data, client);
+        }
+
+        public void CreatRoom(Client client)
+        {
+            Room room = new Room();
+            room.AddClient(client);
+            roomList.Add(room);
         }
 
     }

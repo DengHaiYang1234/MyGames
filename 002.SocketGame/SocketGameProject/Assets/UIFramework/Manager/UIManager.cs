@@ -38,6 +38,9 @@ public class UIManager :BaseManager
     private Dictionary<UIPanelType, Component> panelMap = new Dictionary<UIPanelType, Component>();
     private Stack<BasePanel> panelStack;
     private UIPanelType panelTypeToPush = UIPanelType.None;
+    public delegate bool PopCallBack();
+
+    
 
 
     public override void OnInit()
@@ -110,7 +113,13 @@ public class UIManager :BaseManager
         topPanel2.OnResume();
     }
 
-
+    public void PopPanel(PopCallBack callback)
+    {
+        if (callback())
+        {
+            PopPanel();
+        }
+    }
 
     /// <summary>
     /// 根据面板类型 得到实例化的面板
@@ -135,6 +144,7 @@ public class UIManager :BaseManager
             instPanel.transform.SetParent(CanvasTransform,false);
             instPanel.GetComponent<BasePanel>().UIMgr = this; //让所有派生类持有UIManager
             instPanel.GetComponent<BasePanel>().Facade = gameFacade;//让所有派生类持有GameFacade
+            instPanel.GetComponent<BasePanel>().InitStart();
             panelDict.Add(panelType, instPanel.GetComponent<BasePanel>());
             return instPanel.GetComponent<BasePanel>();
         }

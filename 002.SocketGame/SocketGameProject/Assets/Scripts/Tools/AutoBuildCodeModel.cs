@@ -15,7 +15,7 @@ public class #类名#:MonoBehaviour
 {
     //auto
     #成员#
-    public void Start()
+    public override void InitStart()
     {
         #查找#
     }

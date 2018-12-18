@@ -19,7 +19,7 @@ public class LoginPanel : BasePanel
     private Button Btn_Close = null;
     private LoginRequest loginRequest;
 
-    public void Start()
+    public override void InitStart()
     {
         Input_UserName = gameObject.transform.Find("UserName/Input_UserName").GetComponent<InputField>();
         Txt_UserNamePlaceholder = gameObject.transform.Find("UserName/Input_UserName/Txt_UserNamePlaceholder").GetComponent<Text>();

@@ -18,7 +18,8 @@ public class RoomPanel : BasePanel
     private GameObject roomItemPrefab;
     private GameObject grid;
 
-    public void Start()
+
+    public override void InitStart()
     {
         Txt_Name = gameObject.transform.Find("BattleRes/Txt_Name").GetComponent<Text>();
         Txt_Scene = gameObject.transform.Find("BattleRes/Txt_Scene").GetComponent<Text>();
@@ -33,6 +34,7 @@ public class RoomPanel : BasePanel
         AddClicks();
     }
 
+
     private void AddClicks()
     {
         Btn_CreatRoom.onClick.AddListener(OnCreatRoomClick);
@@ -44,8 +46,9 @@ public class RoomPanel : BasePanel
     {
         UserData data = facade.GetUserData();
         Txt_Name.text = data.UserName;
-        Txt_Scene.text = string.Format("总场次：{0}", data.TotalName.ToString());
+        Txt_Scene.text = string.Format("总场次：{0}", data.TotalCount.ToString());
         Txt_WinNum.text = string.Format("胜利：{0}", data.WinCount.ToString());
+
     }
 
     private void LoadRoomItem(int count = 0)
@@ -62,8 +65,9 @@ public class RoomPanel : BasePanel
 
     private void OnCreatRoomClick()
     {
-        LoadRoomItem();
+        uiMgr.PushPanel(UIPanelType.RoomInfo);
     }
+
     private void OnCloseClick()
     {
         PlayClickSound();
@@ -72,8 +76,9 @@ public class RoomPanel : BasePanel
 
     private void OnRefreshClick()
     {
-
+        
     }
+
 
 
     /// <summary>

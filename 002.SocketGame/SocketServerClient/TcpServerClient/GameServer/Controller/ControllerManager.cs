@@ -30,6 +30,7 @@ namespace GameServer.Controller
             DefaultController defaultController = new DefaultController();
             controllerDic.Add(defaultController.RequestCode, defaultController);
             controllerDic.Add(RequestCode.User, new UserController());
+            controllerDic.Add(RequestCode.Room, new RoomController());
         }
 
         /// <summary>

@@ -22,7 +22,7 @@ public class RegistPanel : BasePanel
     private Button Btn_Close = null;
     private RegistRequest registRequest;
 
-    public void Start()
+    public override void InitStart()
     {
         Input_UserName = gameObject.transform.Find("UserName/Input_UserName").GetComponent<InputField>();
         Txt_UserNamePlaceholder = gameObject.transform.Find("UserName/Input_UserName/Txt_UserNamePlaceholder").GetComponent<Text>();

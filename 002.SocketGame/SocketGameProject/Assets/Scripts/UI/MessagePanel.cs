@@ -11,7 +11,7 @@ public class MessagePanel : BasePanel
     private float showTime = 1f;
     private string message = null;
     
-    public void Start()
+    public override void InitStart()
     {
         Txt_Message = gameObject.transform.Find("Txt_Message").GetComponent<Text>();
 

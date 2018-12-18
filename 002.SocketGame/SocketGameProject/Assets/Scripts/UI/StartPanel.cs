@@ -10,7 +10,7 @@ public class StartPanel : BasePanel
     //auto
     private Button Btn_Login = null;
 
-    public void Start()
+    public override void InitStart()
     {
         Btn_Login = gameObject.transform.Find("Btn_Login").GetComponent<Button>();
         Btn_Login.onClick.AddListener(OnLoginClick);

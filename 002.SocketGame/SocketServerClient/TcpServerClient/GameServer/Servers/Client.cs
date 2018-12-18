@@ -7,6 +7,7 @@ using System.Net.Sockets;
 using Common;
 using MySql.Data.MySqlClient;
 using GameServer.Tool;
+using System.Net;
 
 namespace GameServer.Servers
 {
@@ -42,7 +43,10 @@ namespace GameServer.Servers
         /// </summary>
         public void Start()
         {
-            if (clientSocket == null || clientSocket.Connected == false) return;
+            if (clientSocket == null || clientSocket.Connected == false)
+            {
+                return;
+            }
             clientSocket.BeginReceive(msg.Data, msg.StartIndex, msg.RemainSize, SocketFlags.None, ReceiveCallBack,null);
         }
         /// <summary>
@@ -53,7 +57,10 @@ namespace GameServer.Servers
         {
             try
             {
-                if (clientSocket == null || clientSocket.Connected == false) return;
+                if (clientSocket == null || clientSocket.Connected == false)
+                {
+                    return;
+                }
                 int count = clientSocket.EndReceive(ar); //消息的字节数量
                 if (count == 0)
                 {
@@ -86,8 +93,11 @@ namespace GameServer.Servers
         {
             ConnHelper.CloseConnection(mySqlConnection);
             if (clientSocket != null)
+            {
+                IPEndPoint ipEndPot = clientSocket.RemoteEndPoint as IPEndPoint;
+                Console.WriteLine("====IP:{0}【{1}】已断开====", ipEndPot.Address, ipEndPot.Port);
                 clientSocket.Close();
-
+            }
             server.RemoveClient(this);
         }
 

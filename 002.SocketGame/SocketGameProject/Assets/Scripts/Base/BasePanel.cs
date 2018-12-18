@@ -24,8 +24,11 @@ public class BasePanel : MonoBehaviour
         facade.PlayNoramSound(AudioMAnager.Sound_ButtonClick,1f,false);
     }
 
+    public virtual void InitStart()
+    {
+        
+    }
 
-    
     /// <summary>
     /// 界面被显示出来
     /// </summary>
