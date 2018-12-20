@@ -19,7 +19,7 @@ public class RoomInfoPanel : BasePanel
     private Transform bluePanel = null;
     private Transform redPanel = null;
 
-    private CreatRoomRequest creatRoomRequest = null;
+    //private CreatRoomRequest creatRoomRequest = null;
 
     private UserData ud = null;
 
@@ -45,7 +45,7 @@ public class RoomInfoPanel : BasePanel
         Btn_Close = gameObject.transform.Find("Btn_Close").GetComponent<Button>();
         bluePanel = gameObject.transform.Find("BluePanel");
         redPanel = gameObject.transform.Find("RedPanel");
-        creatRoomRequest = GetComponent<CreatRoomRequest>();
+        //creatRoomRequest = GetComponent<CreatRoomRequest>();
         AddClicks();
     }
 
@@ -135,7 +135,7 @@ public class RoomInfoPanel : BasePanel
     {
         base.OnEnter();
         EnterAnim();
-        creatRoomRequest.SendRequest();
+        //creatRoomRequest.SendRequest();
     }
 
     /// <summary>

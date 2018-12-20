@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using Common;
 
+
+/// <summary>
+/// 登录请求
+/// </summary>
 public class LoginRequest : BaseRequest
 {
     private LoginPanel loginPanel;

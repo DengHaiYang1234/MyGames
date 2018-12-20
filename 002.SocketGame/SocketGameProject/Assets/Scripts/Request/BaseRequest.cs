@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Common;
+using System;
 
 public class BaseRequest : MonoBehaviour
 {
@@ -10,7 +11,11 @@ public class BaseRequest : MonoBehaviour
     protected ActionCode actionCode = ActionCode.Node;
 
     protected GameFacade facade;
-    
+
+    public delegate void ResponseCallBackHandler(System.Object data);
+
+    public event ResponseCallBackHandler callBack;
+
     /// <summary>
     /// 有派生类重写
     /// </summary>
@@ -38,6 +43,15 @@ public class BaseRequest : MonoBehaviour
     {
         
     }
+
+    protected void OnCallBack(System.Object data)
+    {
+        if (this.callBack != null)
+        {
+            this.callBack(data);
+        }
+    }
+
 
     public virtual void OnDestroy()
     {

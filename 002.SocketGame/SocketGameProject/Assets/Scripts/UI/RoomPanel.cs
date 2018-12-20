@@ -2,6 +2,7 @@
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System;
+using System.Collections.Generic;
 using DG.Tweening;
 
 public class RoomPanel : BasePanel
@@ -18,6 +19,13 @@ public class RoomPanel : BasePanel
     private GameObject roomItemPrefab;
     private GameObject grid;
 
+    private UserData userdata = null;
+
+    private List<UserData> userDataList = null;
+
+    private CreatRoomRequest creatRoomRequest;
+
+    private ListRoomRequest listRoomRequest;
 
     public override void InitStart()
     {
@@ -31,7 +39,23 @@ public class RoomPanel : BasePanel
         Btn_Refresh = gameObject.transform.Find("RoomList/Btn_Refresh").GetComponent<Button>();
         roomItemPrefab = Resources.Load("UIPanel/RoomItem") as GameObject;
         grid = gameObject.transform.Find("RoomList/Scroll_View/Viewport/Content").gameObject;
+        creatRoomRequest = gameObject.transform.GetComponent<CreatRoomRequest>();
+        listRoomRequest = gameObject.transform.GetComponent<ListRoomRequest>();
         AddClicks();
+    }
+
+    private void Update()
+    {
+        if (userDataList != null)
+        {
+            LoadRoomItem(userDataList);
+            userDataList = null;
+        }
+
+        if (userdata != null)
+        {
+            
+        }
     }
 
 
@@ -51,21 +75,33 @@ public class RoomPanel : BasePanel
 
     }
 
-    private void LoadRoomItem(int count = 0)
+    public void LoadRoomItemSync(List<UserData> udList)
     {
-        //for (int i = 0; i < count; i++)
-        //{
-        //    var roomItem = Instantiate(roomItemPrefab);
-        //    roomItem.transform.SetParent(grid.transform);
-        //}
+        userDataList = udList;
+    }
 
-        var roomItem = Instantiate(roomItemPrefab);
-        roomItem.transform.SetParent(grid.transform);
+    private void LoadRoomItem(List<UserData> udList )
+    {
+        RoomItem[] roomArr =  grid.GetComponentsInChildren<RoomItem>();
+        foreach (var roomItem in roomArr)
+        {
+            roomItem.DestroySelf();
+        }
+
+        foreach (var userData in udList)
+        {
+            var roomItem = Instantiate(roomItemPrefab);
+            roomItem.transform.SetParent(grid.transform);
+            UserData data = userData;
+            roomItem.GetComponent<RoomItem>().SetRoomInfo(userData.Id,userData.UserName, userData.TotalCount, userData.WinCount,this);
+        }
     }
 
     private void OnCreatRoomClick()
     {
-        uiMgr.PushPanel(UIPanelType.RoomInfo);
+        BasePanel basePanel = uiMgr.PushPanel(UIPanelType.RoomInfo);
+        creatRoomRequest.SetPanel(basePanel);
+        creatRoomRequest.SendRequest();
     }
 
     private void OnCloseClick()
@@ -75,6 +111,11 @@ public class RoomPanel : BasePanel
     }
 
     private void OnRefreshClick()
+    {
+        listRoomRequest.SendRequest();
+    }
+
+    public void OnJoinClick(int id)
     {
         
     }

@@ -8,6 +8,7 @@ using Common;
 using MySql.Data.MySqlClient;
 using GameServer.Tool;
 using System.Net;
+using GameServer.Model;
 
 namespace GameServer.Servers
 {
@@ -20,6 +21,37 @@ namespace GameServer.Servers
         private Server server; //服务器
         private Message msg = new Message(); //消息处理
         private MySqlConnection mySqlConnection;
+
+        private User user;
+        private Result result;
+
+        private Room room;
+
+        public void SetUserData(User _user,Result _result)
+        {
+            user = _user;
+            result = _result;
+        }
+
+        public string GetUserData()
+        {
+            return user.Id + "," +  user.Username + "," + result.TotalCount + "," + result.WinCount;
+        }
+
+        public User User
+        {
+            set { user = value; }
+        }
+
+        public Result Result
+        {
+            set { result = value; }
+        }
+
+        public Room Room
+        {
+            set { room = value; }
+        }
 
         public Client()
         {
@@ -91,6 +123,9 @@ namespace GameServer.Servers
 
         private void Close()
         {
+            if (room != null)
+                room.Close(this);
+
             ConnHelper.CloseConnection(mySqlConnection);
             if (clientSocket != null)
             {

@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using Common;
 
+/// <summary>
+/// 注册请求
+/// </summary>
 public class RegistRequest : BaseRequest
 {
     private RegistPanel registPanel;

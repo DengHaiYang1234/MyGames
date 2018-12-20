@@ -11,8 +11,12 @@ public class RoomItem:MonoBehaviour
 	private Text Txt_TotalCount = null;
 	private Text Txt_WinCount = null;
 	private Button Btn_Join = null;
+
+    private RoomPanel roomPanel;
+
+    private int id;
 	
-    public void Start()
+    public void Awake()
     {
         Txt_UserName = gameObject.transform.Find("Txt_UserName").GetComponent<Text>();
 		Txt_TotalCount = gameObject.transform.Find("Txt_TotalCount").GetComponent<Text>();
@@ -28,21 +32,29 @@ public class RoomItem:MonoBehaviour
     }
 
 
-    private void OnJoinClick(){
-	}
-
-    public void SerRoomInfo(string userName, int totalCount, int winCount)
+    private void OnJoinClick()
     {
-        Txt_UserName.text = userName;
-        Txt_TotalCount.text = "总场次：" + totalCount.ToString();
-        Txt_WinCount.text = "胜利：" + winCount.ToString();
+        roomPanel.OnJoinClick(id);
     }
 
-    public void SerRoomInfo(string userName, string totalCount, string winCount)
+    public void SetRoomInfo(int id, string userName, int totalCount, int winCount, RoomPanel roomPanel)
     {
+        SetRoomInfo(id, userName, totalCount.ToString(), winCount.ToString(),roomPanel);
+    }
+
+    public void SetRoomInfo(int id, string userName, string totalCount, string winCount, RoomPanel roomPanel)
+    {
+        this.roomPanel = roomPanel;
+        this.id = id;
         Txt_UserName.text = userName;
         Txt_TotalCount.text = "总场次：" + totalCount;
         Txt_WinCount.text = "胜利：" + winCount;
+        gameObject.transform.localScale = Vector3.one;
+    }
+
+    public void DestroySelf()
+    {
+        GameObject.Destroy(gameObject);
     }
 
 

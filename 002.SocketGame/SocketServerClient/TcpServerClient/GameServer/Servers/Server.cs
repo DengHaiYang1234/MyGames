@@ -109,12 +109,34 @@ namespace GameServer.Servers
         {
             controllerManager.HandleRequest(requestCode, actionCode, data, client);
         }
-
+        /// <summary>
+        /// 创建房间
+        /// </summary>
+        /// <param name="client"></param>
         public void CreatRoom(Client client)
         {
-            Room room = new Room();
+            Room room = new Room(this);
             room.AddClient(client);
             roomList.Add(room);
+        }
+        /// <summary>
+        /// 总的房间个数
+        /// </summary>
+        /// <returns></returns>
+        public List<Room> GetRoomList()
+        {
+            return roomList;
+        }
+        /// <summary>
+        /// 删除房间
+        /// </summary>
+        /// <param name="room"></param>
+        public void RemoveRoom(Room room)
+        {
+            if (roomList != null && room != null)
+            {
+                roomList.Remove(room);
+            }
         }
 
     }
