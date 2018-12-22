@@ -40,6 +40,7 @@ public class UIManager :BaseManager
     private UIPanelType panelTypeToPush = UIPanelType.None;
     public delegate bool PopCallBack();
 
+    public delegate void PushSyncCallBack(UserData u1, UserData u2);
     
 
 

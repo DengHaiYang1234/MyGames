@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Common;
 
 namespace GameServer.Servers
 {
@@ -42,6 +43,10 @@ namespace GameServer.Servers
         {
             clientRoom.Add(client);
             client.Room = this;
+            if (clientRoom.Count >= 2)
+            {
+                roomState = RoomState.WaitingBattle;
+            }
         }
 
         /// <summary>
@@ -68,6 +73,41 @@ namespace GameServer.Servers
                 clientRoom.Remove(clinet);
             }
             
+        }
+
+        public int GetId()
+        {
+            if (clientRoom.Count > 0)
+            {
+                return clientRoom[0].GetUserId();
+            }
+            return -1;
+        }
+
+        public string GetRoomData()
+        {
+            StringBuilder sb = new StringBuilder();
+            foreach (var client in clientRoom)
+            {
+                sb.Append(client.GetUserData() + "|");
+            }
+
+            if (sb.Length > 0)
+            {
+                sb.Remove(sb.Length - 1,1);
+            }
+            return sb.ToString();
+        }
+        
+        public void BroadcastMessage(Client excludeClient,ActionCode actionCode,string data)
+        {
+            foreach (var client in clientRoom)
+            {
+                if (client != excludeClient)
+                {
+                    server.SendResponse(client, actionCode, data);
+                }
+            }
         }
     }
 }

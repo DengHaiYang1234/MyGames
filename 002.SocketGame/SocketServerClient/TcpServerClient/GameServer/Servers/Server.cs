@@ -139,5 +139,16 @@ namespace GameServer.Servers
             }
         }
 
+        public Room GetRoomById(int id)
+        {
+            foreach (var room in roomList)
+            {
+                if (room.GetId() == id)
+                    return room;
+            }
+
+            return null;
+        }
+
     }
 }

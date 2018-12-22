@@ -33,6 +33,11 @@ namespace GameServer.Servers
             result = _result;
         }
 
+        public int GetUserId()
+        {
+            return user.Id;
+        }
+
         public string GetUserData()
         {
             return user.Id + "," +  user.Username + "," + result.TotalCount + "," + result.WinCount;

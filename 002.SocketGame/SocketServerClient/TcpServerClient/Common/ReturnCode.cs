@@ -8,5 +8,6 @@ namespace Common
     {
         Success,
         Fail,
+        NotFound,
     }
 }

@@ -22,14 +22,24 @@ public class RoomInfoPanel : BasePanel
     //private CreatRoomRequest creatRoomRequest = null;
 
     private UserData ud = null;
+    private UserData ud1 = null;
+    private UserData ud2 = null;
 
     private void Update()
     {
         if (ud != null)
         {
-            SetLocalPlayerRes(ud.UserName, ud.TotalCount.ToString(), ud.WinCount.ToString());
+            SetBluePlayerRes(ud.UserName, ud.TotalCount.ToString(), ud.WinCount.ToString());
             SetEnemyPlayerRes();
             ud = null;
+        }
+
+        if (ud1 != null || ud2 != null)
+        {
+            SetBluePlayerRes(ud1.UserName, ud1.TotalCount.ToString(), ud2.WinCount.ToString());
+            SetRedPlayerRes(ud2.UserName, ud2.TotalCount.ToString(), ud2.WinCount.ToString());
+            ud1 = null;
+            ud2 = null;
         }
     }
 
@@ -62,14 +72,20 @@ public class RoomInfoPanel : BasePanel
         ud = facade.GetUserData();
     }
 
-    public void SetLocalPlayerRes(string username,string totalCount,string winCount)
+    public void SetAllPlayerResSync(UserData ud1,UserData ud2)
+    {
+        this.ud1 = ud1;
+        this.ud2 = ud2;
+    }
+
+    public void SetBluePlayerRes(string username,string totalCount,string winCount)
     {
         Txt_UserName_Blue.text = username;
         Txt_TotalCount_Blue.text = "总场数：" + totalCount;
         Txt_WinCount_Blue.text = "胜利：" + winCount;
     }
 
-    public void SetEnemyPlayerRes(string username, string totalCount, string winCount)
+    public void SetRedPlayerRes(string username, string totalCount, string winCount)
     {
         Txt_UserName_Red.text = username;
         Txt_TotalCount_Red.text = "总场数：" + totalCount;

@@ -57,5 +57,27 @@ namespace GameServer.Controller
 
             return sb.ToString();
         }
+
+        public string JoinRoom(string data, Client client, Server server)
+        {
+            int id = int.Parse(data);
+            Room room =  server.GetRoomById(id);
+            if (room == null)
+            {
+                return ((int)ReturnCode.NotFound).ToString(); //房间未找到
+            } 
+            else if (room.IsWaitingJoin() == false)
+            {
+                return ((int)ReturnCode.Fail).ToString();//房间已满员
+            }
+            else
+            {
+                room.AddClient(client);
+                string roomData = room.GetRoomData(); //所有房间里的信息(id,name,totalCount,winCount|id,name,totalCount,winCount)
+                room.BroadcastMessage(client,ActionCode.UpdateRoom,roomData);
+                return ((int) ReturnCode.Success).ToString() + "-" + roomData;
+            }
+
+        }
     }
 }

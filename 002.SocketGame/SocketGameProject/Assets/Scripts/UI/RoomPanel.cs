@@ -4,6 +4,7 @@ using UnityEngine.EventSystems;
 using System;
 using System.Collections.Generic;
 using DG.Tweening;
+using Common;
 
 public class RoomPanel : BasePanel
 {
@@ -27,6 +28,11 @@ public class RoomPanel : BasePanel
 
     private ListRoomRequest listRoomRequest;
 
+    private JoinRequest joinRoomRequest;
+
+    private UserData ud1;
+    private UserData ud2;
+
     public override void InitStart()
     {
         Txt_Name = gameObject.transform.Find("BattleRes/Txt_Name").GetComponent<Text>();
@@ -41,6 +47,7 @@ public class RoomPanel : BasePanel
         grid = gameObject.transform.Find("RoomList/Scroll_View/Viewport/Content").gameObject;
         creatRoomRequest = gameObject.transform.GetComponent<CreatRoomRequest>();
         listRoomRequest = gameObject.transform.GetComponent<ListRoomRequest>();
+        joinRoomRequest = gameObject.transform.GetComponent<JoinRequest>();
         AddClicks();
     }
 
@@ -55,6 +62,14 @@ public class RoomPanel : BasePanel
         if (userdata != null)
         {
             
+        }
+
+        if (ud1 != null && ud2 != null)
+        {
+            BasePanel panel = uiMgr.PushPanel(UIPanelType.RoomInfo);
+            (panel as RoomInfoPanel).SetAllPlayerResSync(ud1, ud2);
+            ud1 = null;
+            ud2 = null;
         }
     }
 
@@ -117,7 +132,24 @@ public class RoomPanel : BasePanel
 
     public void OnJoinClick(int id)
     {
-        
+        joinRoomRequest.SendRequest(id);
+    }
+
+    public void OnJoinResponse(ReturnCode returnCode,UserData ud1,UserData ud2)
+    {
+        switch (returnCode)
+        {
+            case ReturnCode.NotFound:
+                uiMgr.ShowMessageSync("房间不存在！加入失败");
+                break;
+            case ReturnCode.Success:
+                this.ud1 = ud1;
+                this.ud2 = ud2;
+                break;
+            case ReturnCode.Fail:
+                uiMgr.ShowMessageSync("房间已满，无法加入");
+                break;
+        }
     }
 
 
