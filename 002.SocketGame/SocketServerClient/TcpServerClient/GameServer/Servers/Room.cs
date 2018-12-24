@@ -15,10 +15,16 @@ namespace GameServer.Servers
         End
     }
 
+    /// <summary>
+    /// 房间类
+    /// </summary>
     class Room
     {
+        //管理房间中的科幻段
         private List<Client> clientRoom = new List<Client>();
+        //房间状态
         private RoomState roomState = RoomState.WaitingJoin;
+        //服务器
         private Server server;
 
         /// <summary>
@@ -36,7 +42,7 @@ namespace GameServer.Servers
         }
 
         /// <summary>
-        /// 当前房间人数
+        /// 添加客户端
         /// </summary>
         /// <param name="client"></param>
         public void AddClient(Client client)
@@ -47,6 +53,22 @@ namespace GameServer.Servers
             {
                 roomState = RoomState.WaitingBattle;
             }
+        }
+
+        /// <summary>
+        /// 删除房间中的客户端
+        /// </summary>
+        /// <param name="client"></param>
+        public void RemoveClient(Client client)
+        {
+            client.Room = null;
+            clientRoom.Remove(client);
+            if (clientRoom.Count >= 2)
+            {
+                roomState = RoomState.WaitingBattle;
+            }
+            else
+                roomState = RoomState.WaitingJoin;
         }
 
         /// <summary>
@@ -75,6 +97,10 @@ namespace GameServer.Servers
             
         }
 
+        /// <summary>
+        /// 获取房间ID
+        /// </summary>
+        /// <returns></returns>
         public int GetId()
         {
             if (clientRoom.Count > 0)
@@ -84,6 +110,10 @@ namespace GameServer.Servers
             return -1;
         }
 
+        /// <summary>
+        /// 获取房间信息
+        /// </summary>
+        /// <returns></returns>
         public string GetRoomData()
         {
             StringBuilder sb = new StringBuilder();
@@ -99,6 +129,12 @@ namespace GameServer.Servers
             return sb.ToString();
         }
         
+        /// <summary>
+        /// 广播房间信息
+        /// </summary>
+        /// <param name="excludeClient"></param>
+        /// <param name="actionCode"></param>
+        /// <param name="data"></param>
         public void BroadcastMessage(Client excludeClient,ActionCode actionCode,string data)
         {
             foreach (var client in clientRoom)
@@ -108,6 +144,28 @@ namespace GameServer.Servers
                     server.SendResponse(client, actionCode, data);
                 }
             }
+        }
+
+        /// <summary>
+        /// 是否是房主
+        /// </summary>
+        /// <param name="client"></param>
+        /// <returns></returns>
+        public bool IsHouseOwner(Client client)
+        {
+            return client == clientRoom[0];
+        }
+
+        /// <summary>
+        /// 关闭房间
+        /// </summary>
+        public void Close()
+        {
+            foreach (Client client in clientRoom)
+            {
+                client.Room = null;
+            }
+            server.RemoveRoom(this);
         }
     }
 }

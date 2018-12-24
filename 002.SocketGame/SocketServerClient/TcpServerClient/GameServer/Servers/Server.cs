@@ -119,6 +119,7 @@ namespace GameServer.Servers
             room.AddClient(client);
             roomList.Add(room);
         }
+
         /// <summary>
         /// 总的房间个数
         /// </summary>
@@ -127,6 +128,7 @@ namespace GameServer.Servers
         {
             return roomList;
         }
+
         /// <summary>
         /// 删除房间
         /// </summary>
@@ -139,6 +141,11 @@ namespace GameServer.Servers
             }
         }
 
+        /// <summary>
+        /// 根据ID获取房间信息
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public Room GetRoomById(int id)
         {
             foreach (var room in roomList)

@@ -58,6 +58,13 @@ namespace GameServer.Controller
             return sb.ToString();
         }
 
+        /// <summary>
+        /// 加入房间
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="client"></param>
+        /// <param name="server"></param>
+        /// <returns></returns>
         public string JoinRoom(string data, Client client, Server server)
         {
             int id = int.Parse(data);
@@ -79,5 +86,32 @@ namespace GameServer.Controller
             }
 
         }
+
+        /// <summary>
+        /// 退出房间
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="client"></param>
+        /// <param name="server"></param>
+        /// <returns></returns>
+        public string QuitRoom(string data, Client client, Server server)
+        {
+            bool isHouseOwner = client.IsHouseOwner();
+            Room room = client.Room;
+            if (isHouseOwner) //房主退出
+            {
+                room.BroadcastMessage(client, ActionCode.QuitRoom, ((int)ReturnCode.Success).ToString());
+                room.Close();
+                return ((int)ReturnCode.Success).ToString();
+            }
+            else//其他成员退出
+            {
+                room.RemoveClient(client);
+                room.BroadcastMessage(client, ActionCode.UpdateRoom, room.GetRoomData());
+                return ((int)ReturnCode.Success).ToString();
+            }
+        }
+
+
     }
 }

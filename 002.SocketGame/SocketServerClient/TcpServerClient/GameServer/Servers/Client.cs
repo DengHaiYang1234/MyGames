@@ -56,6 +56,7 @@ namespace GameServer.Servers
         public Room Room
         {
             set { room = value; }
+            get { return room; }
         }
 
         public Client()
@@ -150,6 +151,11 @@ namespace GameServer.Servers
         {
             byte[] bytes = Message.PackData(actionCode, data);
             clientSocket.Send(bytes);
+        }
+
+        public bool IsHouseOwner()
+        {
+            return room.IsHouseOwner(this);
         }
     }
 }

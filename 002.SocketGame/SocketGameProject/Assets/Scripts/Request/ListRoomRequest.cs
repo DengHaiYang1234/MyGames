@@ -25,15 +25,16 @@ public class ListRoomRequest : BaseRequest
 
     public override void OnResponse(string data)
     {
-        if (data == "0") return;
         List<UserData> udList = new List<UserData>();
-        string[] roomArr = data.Split('|');
-        foreach (string ud in roomArr)
+        if (data != "0")
         {
-            string[] strs =  ud.Split(',');
-            udList.Add(new UserData(int.Parse(strs[0]), strs[1], int.Parse(strs[2]), int.Parse(strs[3])));  
+            string[] roomArr = data.Split('|');
+            foreach (string ud in roomArr)
+            {
+                string[] strs = ud.Split(',');
+                udList.Add(new UserData(int.Parse(strs[0]), strs[1], int.Parse(strs[2]), int.Parse(strs[3])));
+            }
         }
-
         roomPanel.LoadRoomItemSync(udList);
     }
 }

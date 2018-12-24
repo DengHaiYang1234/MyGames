@@ -31,6 +31,7 @@ namespace GameServer.Controller
             controllerDic.Add(defaultController.RequestCode, defaultController);
             controllerDic.Add(RequestCode.User, new UserController());
             controllerDic.Add(RequestCode.Room, new RoomController());
+            controllerDic.Add(RequestCode.Game, new GameController());
         }
 
         /// <summary>

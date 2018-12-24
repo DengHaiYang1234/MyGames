@@ -25,8 +25,17 @@ public class UpdateRoomRequest : BaseRequest
         UserData userData_2 = null;
 
         string[] userDataArr = data.Split('|');
-        userData_1 = new UserData(userDataArr[0]);
-        userData_2 = new UserData(userDataArr[1]);
+        
+        if (userDataArr.Length > 0)
+        {
+            userData_1 = new UserData(userDataArr[0]);
+        }
+
+        if (userDataArr.Length > 1)
+        {
+            userData_2 = new UserData(userDataArr[1]);
+        }
+       
         roomInfoPanel.SetAllPlayerResSync(userData_1, userData_2);
     }
 

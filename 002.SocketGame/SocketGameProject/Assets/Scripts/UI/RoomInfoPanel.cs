@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System;
 using DG.Tweening;
+using Common;
 
 public class RoomInfoPanel : BasePanel
 {
@@ -25,6 +26,12 @@ public class RoomInfoPanel : BasePanel
     private UserData ud1 = null;
     private UserData ud2 = null;
 
+    private QuitRoomRequest quitRoomRequest = null;
+
+    private StartGameRequest startGameRequest = null;
+
+    private bool isPop = false;
+
     private void Update()
     {
         if (ud != null)
@@ -34,12 +41,25 @@ public class RoomInfoPanel : BasePanel
             ud = null;
         }
 
-        if (ud1 != null || ud2 != null)
+        if (ud1 != null && ud2 != null)
         {
-            SetBluePlayerRes(ud1.UserName, ud1.TotalCount.ToString(), ud2.WinCount.ToString());
+            SetBluePlayerRes(ud1.UserName, ud1.TotalCount.ToString(), ud1.WinCount.ToString());
             SetRedPlayerRes(ud2.UserName, ud2.TotalCount.ToString(), ud2.WinCount.ToString());
             ud1 = null;
             ud2 = null;
+        }
+
+        if (ud1 != null && ud2 == null)
+        {
+            SetBluePlayerRes(ud1.UserName, ud1.TotalCount.ToString(), ud1.WinCount.ToString());
+            SetEnemyPlayerRes();
+            ud1 = null;
+        }
+
+        if (isPop)
+        {
+            ExitAnim();
+            isPop = false;
         }
     }
 
@@ -56,6 +76,8 @@ public class RoomInfoPanel : BasePanel
         bluePanel = gameObject.transform.Find("BluePanel");
         redPanel = gameObject.transform.Find("RedPanel");
         //creatRoomRequest = GetComponent<CreatRoomRequest>();
+        quitRoomRequest = GetComponent<QuitRoomRequest>();
+        startGameRequest = GetComponent<StartGameRequest>();
         AddClicks();
     }
 
@@ -134,13 +156,29 @@ public class RoomInfoPanel : BasePanel
     
     private void OnStartGameClick()
     {
+        startGameRequest.SendRequest();
+    }
 
+    public void OnStartGameResponse(ReturnCode returnCode)
+    {
+        if (returnCode == ReturnCode.Fail)
+        {
+            uiMgr.ShowMessageSync("你不是房主，无法开始游戏！");
+        }
+        else
+        {
+            
+        }
     }
 
     private void OnCloseClick()
     {
-        ExitAnim();
-        //uiMgr.PopPanel(IsExitAnim);
+        quitRoomRequest.SendRequest();
+    }
+
+    public void OnQuitResponse()
+    {
+        isPop = true;
     }
 
 
