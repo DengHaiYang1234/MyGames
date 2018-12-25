@@ -18,5 +18,7 @@ namespace Common
         UpdateRoom,
         QuitRoom,
         StartGame,
+        ShowTimer,
+        StartPlay,
     }
 }

@@ -14,11 +14,14 @@ namespace GameServer.Controller
         {
             requestCode = RequestCode.Game;
         }
-
+         
         public string StartGame(string data, Client client, Server server)
         {
             if (client.IsHouseOwner()) //是否是房主
             {
+                Room room = client.Room;
+                room.BroadcastMessage(client, ActionCode.StartGame, ((int) ReturnCode.Success).ToString());
+                room.StartTimer();
                 return ((int) ReturnCode.Success).ToString();
             }
             else

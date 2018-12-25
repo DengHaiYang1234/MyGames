@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Common;
+using System.Threading;
 
 namespace GameServer.Servers
 {
@@ -166,6 +167,23 @@ namespace GameServer.Servers
                 client.Room = null;
             }
             server.RemoveRoom(this);
+        }
+
+        public void StartTimer()
+        {
+            new Thread(RunTimer).Start();
+        }
+
+        public void RunTimer()
+        {
+            Thread.Sleep(1000);//1秒
+            for (int i = 3; i > 0; i--)
+            {
+                BroadcastMessage(null, ActionCode.ShowTimer, i.ToString());
+                Thread.Sleep(1000);//1秒
+            }
+
+            BroadcastMessage(null, ActionCode.StartPlay, "r");
         }
     }
 }

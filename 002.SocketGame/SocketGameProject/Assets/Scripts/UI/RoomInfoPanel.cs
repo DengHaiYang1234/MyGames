@@ -167,7 +167,8 @@ public class RoomInfoPanel : BasePanel
         }
         else
         {
-            
+            Debug.LogError("OnStartGameResponse  OnStartGameResponse");
+            uiMgr.PushPanelSync(UIPanelType.Game);
         }
     }
 

@@ -27,7 +27,7 @@
 		"path" : "UIPanel/RoomInfoPanel"
 	},
 		{
-		"panelTypeString" : "GamePanel",
+		"panelTypeString" : "Game",
 		"path" : "UIPanel/GamePanel"
 	}
 

@@ -12,4 +12,5 @@ public enum UIPanelType
     Register,
     Room,
     RoomInfo,
+    Game,
 }

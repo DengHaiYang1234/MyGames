@@ -21,6 +21,7 @@ public class StartGameRequest : BaseRequest
 
     public override void OnResponse(string data)
     {
+        Debug.Log("StartGameRequest  OnResponse StartGameRequest  OnResponse StartGameRequest  OnResponse");
         ReturnCode returnCode = (ReturnCode)int.Parse(data);
         roomInfoPanel.OnStartGameResponse(returnCode);
     }
