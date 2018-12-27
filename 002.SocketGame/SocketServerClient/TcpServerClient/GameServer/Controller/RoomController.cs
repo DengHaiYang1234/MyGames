@@ -25,7 +25,7 @@ namespace GameServer.Controller
         public string CreatRoom(string data, Client client, Server server)
         {
             server.CreatRoom(client);
-            return ((int)ReturnCode.Success).ToString();
+            return ((int)ReturnCode.Success).ToString() + "," + ((int)RoleType.Blue).ToString();
         }
 
         /// <summary>
@@ -82,9 +82,8 @@ namespace GameServer.Controller
                 room.AddClient(client);
                 string roomData = room.GetRoomData(); //所有房间里的信息(id,name,totalCount,winCount|id,name,totalCount,winCount)
                 room.BroadcastMessage(client,ActionCode.UpdateRoom,roomData);
-                return ((int) ReturnCode.Success).ToString() + "-" + roomData;
+                return ((int) ReturnCode.Success).ToString() + "," + ((int)RoleType.Red).ToString() + "-" + roomData;
             }
-
         }
 
         /// <summary>

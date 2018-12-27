@@ -118,6 +118,16 @@ public class GameFacade : MonoBehaviour
         return playerMgr.UserData;
     }
 
+    public void SetCurrentRoleType(RoleType rt)
+    {
+        playerMgr.SetCurrentRoleType(rt);
+    }
+
+    public GameObject GetCurrentRoleObj()
+    {
+        return playerMgr.GetCurrentRoleObj();
+    }
+
     private void OnDestroyManager()
     {
         uiMgr.OnDestroy();

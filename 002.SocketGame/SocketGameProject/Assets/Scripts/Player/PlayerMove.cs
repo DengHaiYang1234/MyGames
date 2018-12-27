@@ -11,17 +11,26 @@ public class PlayerMove : MonoBehaviour
     {
         anim = GetComponent<Animator>();
     }
-    private void Update()
+
+    private void FixedUpdate()
     {
+        //若当前是处在Attack状态。那么就停止移动
+        if (anim.GetCurrentAnimatorStateInfo(0).IsName("Grounded") == false) return;
+
         float h = Input.GetAxis("Horizontal");
         float v = Input.GetAxis("Vertical");
-        //移动   世界坐标中移动
-        transform.Translate(new Vector3(h, 0, v) * speed * Time.deltaTime,Space.World);
-        //转向
-        transform.rotation = Quaternion.LookRotation(new Vector3(h, 0, v));
-        //动画
-        float res = Mathf.Max(Mathf.Abs(h), Mathf.Abs(v));
-        anim.SetFloat("Forward", res);
+
+        if (Mathf.Abs(h) > 0 || Mathf.Abs(v) > 0)
+        {
+            //移动   世界坐标中移动
+            transform.Translate(new Vector3(h, 0, v) * speed * Time.deltaTime, Space.World);
+            //转向
+            transform.rotation = Quaternion.LookRotation(new Vector3(h, 0, v));
+            //动画
+            float res = Mathf.Max(Mathf.Abs(h), Mathf.Abs(v));
+            anim.SetFloat("Forward", res); //动画移动速度
+        }
+
     }
 
 }
