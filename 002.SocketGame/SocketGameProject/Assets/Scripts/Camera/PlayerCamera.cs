@@ -15,17 +15,23 @@ public class PlayerCamera : MonoBehaviour
 
     private void Update()
     {
-        target = GameFacade.Instance.GetCurrentRoleObj().transform;
+        GameObject obj = GameFacade.Instance.GetCurrentRoleObj();
+        
 
-        if (target == null)
+        if (obj == null)
         {
             transform.position = new Vector3(15.6f, 45.12f, -29.45f);
             transform.rotation = Quaternion.Euler(43.809f, -25.021f, -1.822f);
             return;
         }
+        else
+        {
+            target = GameFacade.Instance.GetCurrentRoleObj().transform;
+            Vector3 targetPosition = target.position + offest; //目标位置
+            transform.position = Vector3.Lerp(transform.position, targetPosition, smoothing * Time.deltaTime);//相机位置
+            transform.LookAt(target);
+        }
 
-        Vector3 targetPosition = target.position + offest; //目标位置
-        transform.position = Vector3.Lerp(transform.position, targetPosition, smoothing * Time.deltaTime);//相机位置
-        transform.LookAt(target);
+
     }
 }

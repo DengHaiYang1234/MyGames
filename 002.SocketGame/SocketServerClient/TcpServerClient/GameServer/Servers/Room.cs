@@ -89,13 +89,25 @@ namespace GameServer.Servers
         {
             if (clinet == clientRoom[0])
             {
-                server.RemoveRoom(this);
+                Close();
             }
             else
             {
                 clientRoom.Remove(clinet);
             }
             
+        }
+
+        /// <summary>
+        /// 关闭房间
+        /// </summary>
+        public void Close()
+        {
+            foreach (Client client in clientRoom)
+            {
+                client.Room = null;
+            }
+            server.RemoveRoom(this);
         }
 
         /// <summary>
@@ -157,17 +169,7 @@ namespace GameServer.Servers
             return client == clientRoom[0];
         }
 
-        /// <summary>
-        /// 关闭房间
-        /// </summary>
-        public void Close()
-        {
-            foreach (Client client in clientRoom)
-            {
-                client.Room = null;
-            }
-            server.RemoveRoom(this);
-        }
+
 
         public void StartTimer()
         {

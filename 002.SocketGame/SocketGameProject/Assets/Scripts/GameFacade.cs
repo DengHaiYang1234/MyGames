@@ -128,6 +128,17 @@ public class GameFacade : MonoBehaviour
         return playerMgr.GetCurrentRoleObj();
     }
 
+    public void EnterPlaying()
+    {
+        playerMgr.SpawnRolesSync();
+    }
+
+    public void StartPlaying()
+    {
+        playerMgr.AddControllerScript();
+        playerMgr.CreatSyncRequest();
+    }
+
     private void OnDestroyManager()
     {
         uiMgr.OnDestroy();

@@ -29,5 +29,14 @@ namespace GameServer.Controller
                 return ((int)ReturnCode.Fail).ToString();
             }
         }
+
+        public string Move(string data, Client client, Server server)
+        {
+            Room room = client.Room;
+            if (room != null) { 
+            room.BroadcastMessage(client, ActionCode.Move, data);
+            }
+            return null;
+        }
     }
 }

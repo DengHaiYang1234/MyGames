@@ -149,8 +149,16 @@ namespace GameServer.Servers
         /// <param name="data"></param>
         public void Send(ActionCode actionCode, string data)
         {
-            byte[] bytes = Message.PackData(actionCode, data);
-            clientSocket.Send(bytes);
+            try
+            {
+                byte[] bytes = Message.PackData(actionCode, data);
+                clientSocket.Send(bytes);
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine("无法发送消息:" + e);
+            }
+
         }
 
         public bool IsHouseOwner()

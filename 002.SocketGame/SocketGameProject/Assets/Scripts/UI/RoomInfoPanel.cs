@@ -169,6 +169,7 @@ public class RoomInfoPanel : BasePanel
         {
             Debug.LogError("OnStartGameResponse  OnStartGameResponse");
             uiMgr.PushPanelSync(UIPanelType.Game);
+            facade.EnterPlaying();
         }
     }
 
