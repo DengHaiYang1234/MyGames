@@ -2,55 +2,45 @@
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System;
-using DG.Tweening;
 
-public class GamePanel:BasePanel
+
+public class GamePanel : BasePanel
 {
+    //---------------------------------------注意以下会完成变量初始化，刷新时会更新变量--------------------------------------------
+
     //auto
     private Text Txt_Timer = null;
+    private Button Btn_Success = null;
+    private Button Btn_Fail = null;
 
-    private int time = -1;
-	
     public override void InitStart()
     {
         Txt_Timer = gameObject.transform.Find("Txt_Timer").GetComponent<Text>();
-		AddClicks();
-    }
-
-    private void Update()
-    {
-        if (time > -1)
-        {
-            ShowTime(time);
-            time = -1;
-        }
+        Btn_Success = gameObject.transform.Find("Btn_Success").GetComponent<Button>();
+        Btn_Fail = gameObject.transform.Find("Btn_Fail").GetComponent<Button>();
+        AddClicks();
     }
 
     private void AddClicks()
     {
-        
+        Btn_Success.onClick.AddListener(OnSuccessClick);
+        Btn_Fail.onClick.AddListener(OnFailClick);
+
     }
 
-    public void ShowTimeSync(int time)
+    //---------------------------------------注意以上会完成变量初始化，刷新时会更新变量--------------------------------------------
+
+    //defaultFcuntion
+
+    private void OnSuccessClick()
     {
-        
-        this.time = time;
+        Debug.Log("123");
+    }
+    private void OnFailClick()
+    {
+        Debug.Log("234");
     }
 
-    public void ShowTime(int time)
-    {
-        Debug.LogError("time" + time);
-        Txt_Timer.gameObject.SetActive(true);
-        Txt_Timer.text = time.ToString();
-        Txt_Timer.transform.localScale = Vector3.one;
-        Color tempColor = Txt_Timer.color;
-        tempColor.a = 1;
-        Txt_Timer.color = tempColor;
-        Txt_Timer.transform.DOScale(2, 0.5f).SetDelay(0.3f);
-        Txt_Timer.DOFade(0, 0.3f).SetDelay(0.3f).OnComplete(() => Txt_Timer.gameObject.SetActive(false));
-        facade.PlayNoramSound(AudioMAnager.Sound_Timer,1f,false);
-    }
-    
 
     /// <summary>
     /// 界面被显示出来
@@ -86,4 +76,3 @@ public class GamePanel:BasePanel
 
     //autoEnd
 }
-            

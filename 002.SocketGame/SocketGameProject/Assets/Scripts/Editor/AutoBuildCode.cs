@@ -98,12 +98,16 @@ dicUIType.Keys.Contains(trans.name.Split('_')[0])
                 return;
             }
 
+            //创建变量
             string memberstring = "";
 
+            //初始化UI相关属性（Btn，Txt等）
             string loadedcontant = "";
 
+            //按钮监听回调
             string function = "";
 
+            //添加按钮监听
             string addListenerString = "";
 
             List<string> btns = new List<string>();
@@ -120,7 +124,6 @@ dicUIType.Keys.Contains(trans.name.Split('_')[0])
 
                 //根据既定的类型找到该obj的GetComponent
                 loadedcontant += itemtran.name + " = " + "gameObject.transform.Find(\"" + nodePathList[itemtran.name] + "\").GetComponent<" + typeStr + ">();\r\n\t\t";
-                
             }
 
             loadedcontant += "AddClicks();";
@@ -148,14 +151,22 @@ dicUIType.Keys.Contains(trans.name.Split('_')[0])
 
                 string splitStart = "//auto";
                 string splitEnd = "//autoEnd";
+                string splitMid = "//defaultFcuntion";
 
                 //截取splitStart以上部分内容(即所有using)
                 string unChangeUsing = Regex.Split(classStr, splitStart, RegexOptions.IgnoreCase)[0];
-                //截取splitEnd以下部分内容（即所有类成员等）
-                string unChangeStr = Regex.Split(classStr, splitEnd, RegexOptions.IgnoreCase)[1];
 
-                //正则表达式来查找匹配splitStart  splitEnd之间的所有字符串？
-                Regex rg = new Regex("(?<=(" + splitStart + "))[.\\s\\S]*?(?=(" + splitEnd + "))", RegexOptions.Multiline | RegexOptions.Singleline | RegexOptions.IgnoreCase);
+                //截取中间部分//Fcuntion
+                string unChangeDefaultFucn =
+                    new Regex("(?<=(" + splitMid + "))[.\\s\\S]*?(?=(" + splitEnd + "))",
+                        RegexOptions.Multiline | RegexOptions.Singleline | RegexOptions.IgnoreCase).Match(
+                            classStr).Value;
+
+                //截取splitEnd以下部分内容（即新添加的方法）
+                string unChangeAddFuc = Regex.Split(classStr, splitEnd, RegexOptions.IgnoreCase)[1];
+
+                //正则表达式来查找匹配splitStart  splitMid之间的所有字符串
+                Regex rg = new Regex("(?<=(" + splitStart + "))[.\\s\\S]*?(?=(" + splitMid + "))", RegexOptions.Multiline | RegexOptions.Singleline | RegexOptions.IgnoreCase);
                 //当前读出来的所有成员
                 string changeStr = rg.Match(AutoBuildCodeModel.UIClass).Value;
 
@@ -164,25 +175,25 @@ dicUIType.Keys.Contains(trans.name.Split('_')[0])
                 build.Append(unChangeUsing);
                 build.Append(splitStart);
                 build.Append(changeStr);
+                build.Append(splitMid);
+                build.Append(unChangeDefaultFucn);
                 build.Append(splitEnd);
-                build.Append(unChangeStr);
-
+                build.Append(unChangeAddFuc);
                 classStr = build.ToString();
-
             }
             else
             {
                 classStr = AutoBuildCodeModel.UIClass;
+                
             }
-
+            //创建按钮回调方法
+            classStr = classStr.Replace("#CallBack#", function);
             //创建类名
             classStr = classStr.Replace("#类名#", selectObj.name);
             //创建方法内成员
             classStr = classStr.Replace("#查找#", loadedcontant);
             //创建全局变量
             classStr = classStr.Replace("#成员#", memberstring);
-            //创建按钮回调方法
-            classStr = classStr.Replace("#CallBack#",function);
             //添加按钮监听事件
             classStr = classStr.Replace("#AddListener#", addListenerString);
 

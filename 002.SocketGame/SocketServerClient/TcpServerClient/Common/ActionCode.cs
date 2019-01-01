@@ -13,7 +13,7 @@ namespace Common
         Login,
         Register,
         ListRoom,
-        CreatRoom,
+        CreatRoom, 
         JoinRoom,
         UpdateRoom,
         QuitRoom,
@@ -21,5 +21,8 @@ namespace Common
         ShowTimer,
         StartPlay,
         Move,
+        Shoot,
+        Attack,
+        GameOver,
     }
 }

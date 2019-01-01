@@ -139,6 +139,11 @@ public class GameFacade : MonoBehaviour
         playerMgr.CreatSyncRequest();
     }
 
+    public void SendAttack(int damage)
+    {
+        playerMgr.SendAttack(damage);
+    }
+
     private void OnDestroyManager()
     {
         uiMgr.OnDestroy();

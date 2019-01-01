@@ -27,6 +27,22 @@ namespace GameServer.Servers
 
         private Room room;
 
+        private int hp;
+
+        public int HP { get; set; }
+
+        public bool TakeDamage(int damage)
+        {
+            HP -= damage;
+            hp = Math.Max(HP, 0);
+            return hp <= 0 ? true : false;
+        }
+
+        public bool IsDie()
+        {
+            return hp <= 0;
+        }
+
         public void SetUserData(User _user,Result _result)
         {
             user = _user;

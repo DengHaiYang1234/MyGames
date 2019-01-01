@@ -13,6 +13,8 @@ using System;
 
 public class #类名#:MonoBehaviour
 {
+    //---------------------------------------注意以下会完成变量初始化，刷新时会更新变量--------------------------------------------
+
     //auto
     #成员#
     public override void InitStart()
@@ -24,8 +26,11 @@ public class #类名#:MonoBehaviour
     {
         #AddListener#
     }
-
-
+    
+    //---------------------------------------注意以上会完成变量初始化，刷新时会更新变量--------------------------------------------
+    
+    //defaultFcuntion
+    
     #CallBack#
 
     /// <summary>

@@ -86,8 +86,8 @@ public class MoveRequest : BaseRequest
     public override void OnResponse(string data)
     {
         string[] strs = data.Split('|');
-        pos = Parse(strs[0]);
-        rot = Parse(strs[1]);
+        pos = UnityTools.Parse(strs[0]);
+        rot = UnityTools.Parse(strs[1]);
         foward = float.Parse(strs[2]);
         isSyncRemotePlayer = true;
     }
@@ -95,19 +95,7 @@ public class MoveRequest : BaseRequest
 
     #region 同步其他玩家信息
 
-    /// <summary>
-    /// 位置转换
-    /// </summary>
-    /// <param name="str"></param>
-    /// <returns></returns>
-    private Vector3 Parse(string str)
-    {
-        string[] strs = str.Split(',');
-        float x = float.Parse(strs[0]);
-        float y = float.Parse(strs[1]);
-        float z = float.Parse(strs[2]);
-        return new Vector3(x, y, z);
-    }
+
 
     /// <summary>
     /// 设置需要同步玩家信息

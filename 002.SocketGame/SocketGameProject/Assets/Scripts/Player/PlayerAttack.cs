@@ -7,6 +7,7 @@ public class PlayerAttack : MonoBehaviour
     private Animator anim;
     public GameObject arrowPreafab;
     private Transform leftHandTrans;
+    private PlayerManager playerManger;
 
     private Vector3 shootDir;
 
@@ -44,9 +45,16 @@ public class PlayerAttack : MonoBehaviour
         }
     }
 
+    public void SetPlayerManager(PlayerManager playerManger)
+    {
+        this.playerManger = playerManger;
+    }
+     
     private void Shoot()
     {
-        GameObject.Instantiate(arrowPreafab, leftHandTrans.position, Quaternion.LookRotation(shootDir));
+        playerManger.Shoot(arrowPreafab, leftHandTrans.position, Quaternion.LookRotation(shootDir));
+        
+
     }
 
 }
