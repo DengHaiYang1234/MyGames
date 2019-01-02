@@ -82,6 +82,7 @@ dicUIType.Keys.Contains(trans.name.Split('_')[0])
                     {
                         isErr = true;
                         Debug.LogError(string.Format("同名同路径。请检查! 名称:{0},路径:{1}", node.name, nodePath));
+                        break;
                     }
                     nodePathList.Add(node.name, nodePath);
                 }
@@ -107,10 +108,16 @@ dicUIType.Keys.Contains(trans.name.Split('_')[0])
             //按钮监听回调
             string function = "";
 
+            //补充
+            string supplement = "";
+
             //添加按钮监听
             string addListenerString = "";
 
+            //按钮集合
             List<string> btns = new List<string>();
+
+            Dictionary<string, string> btnDic = new Dictionary<string, string>();
 
             //创建并初始化变量
             foreach (Transform itemtran in mainNode)
@@ -118,7 +125,18 @@ dicUIType.Keys.Contains(trans.name.Split('_')[0])
                 string typeStr = dicUIType[itemtran.name.Split('_')[0]];
 
                 if (typeStr == "Button")
-                    btns.Add(itemtran.name);
+                {
+                    if (!btns.Contains(itemtran.name))
+                    {
+                        btns.Add(itemtran.name);
+                    }
+                    else
+                    {
+                        isErr = true;
+                        Console.WriteLine("按钮名称重复。请检查：{0}", itemtran.name);
+                        break;
+                    }
+                }
 
                 memberstring += "private " + typeStr + " " + itemtran.name + " = null;\r\n\t";  //根据既定的类型创建对应变量类型
 
@@ -126,12 +144,20 @@ dicUIType.Keys.Contains(trans.name.Split('_')[0])
                 loadedcontant += itemtran.name + " = " + "gameObject.transform.Find(\"" + nodePathList[itemtran.name] + "\").GetComponent<" + typeStr + ">();\r\n\t\t";
             }
 
+            if (isErr)
+            {
+                Debug.LogError("有错误。请检查报错");
+                return;
+            }
+
             loadedcontant += "AddClicks();";
 
             foreach (var btn in btns)
             {
                 string funcName = "On" + btn.Split('_')[1] + "Click";
-                function += "private void " + funcName + "(){\r\n\t} \r\n\t";
+                string aloneFunc = "private void " + funcName + "(){\r\n\t} \r\n\t";
+                function += aloneFunc;
+                btnDic[btn] = "private void " + funcName + "()"; //存储方法
                 addListenerString += btn + ".onClick.AddListener(" + funcName + ");\r\n\t";
             }
             
@@ -139,7 +165,7 @@ dicUIType.Keys.Contains(trans.name.Split('_')[0])
             string scriptPath = Application.dataPath + "/Scripts/" + selectObj.name + ".cs";
 
             string classStr = "";
-
+            
             if (File.Exists(scriptPath))
             {
                 FileStream classFile = new FileStream(scriptPath, FileMode.Open);
@@ -152,6 +178,17 @@ dicUIType.Keys.Contains(trans.name.Split('_')[0])
                 string splitStart = "//auto";
                 string splitEnd = "//autoEnd";
                 string splitMid = "//defaultFcuntion";
+
+                foreach (var btn in btnDic)
+                {
+                    bool isMatch = Regex.IsMatch(classStr, btn.Value);
+                    if (!isMatch)
+                    {
+                        supplement += btn.Value + "{\r\n\t} \r\n\t";
+                    }
+                    supplement = "\r\n" + supplement;
+
+                }
 
                 //截取splitStart以上部分内容(即所有using)
                 string unChangeUsing = Regex.Split(classStr, splitStart, RegexOptions.IgnoreCase)[0];
@@ -167,7 +204,8 @@ dicUIType.Keys.Contains(trans.name.Split('_')[0])
 
                 //正则表达式来查找匹配splitStart  splitMid之间的所有字符串
                 Regex rg = new Regex("(?<=(" + splitStart + "))[.\\s\\S]*?(?=(" + splitMid + "))", RegexOptions.Multiline | RegexOptions.Singleline | RegexOptions.IgnoreCase);
-                //当前读出来的所有成员
+                
+                //读取需要改变的部分
                 string changeStr = rg.Match(AutoBuildCodeModel.UIClass).Value;
 
                 //创建类成员及using
@@ -176,6 +214,7 @@ dicUIType.Keys.Contains(trans.name.Split('_')[0])
                 build.Append(splitStart);
                 build.Append(changeStr);
                 build.Append(splitMid);
+                build.Append(supplement);//添加补充部分
                 build.Append(unChangeDefaultFucn);
                 build.Append(splitEnd);
                 build.Append(unChangeAddFuc);
@@ -184,7 +223,6 @@ dicUIType.Keys.Contains(trans.name.Split('_')[0])
             else
             {
                 classStr = AutoBuildCodeModel.UIClass;
-                
             }
             //创建按钮回调方法
             classStr = classStr.Replace("#CallBack#", function);
@@ -196,6 +234,9 @@ dicUIType.Keys.Contains(trans.name.Split('_')[0])
             classStr = classStr.Replace("#成员#", memberstring);
             //添加按钮监听事件
             classStr = classStr.Replace("#AddListener#", addListenerString);
+            //////添加按钮监听事件
+            //classStr = classStr.Replace("#supplement#", supplement);
+
 
             //写入完成
             FileStream file = new FileStream(scriptPath, FileMode.CreateNew);

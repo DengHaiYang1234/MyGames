@@ -12,12 +12,16 @@ public class GamePanel : BasePanel
     private Text Txt_Timer = null;
     private Button Btn_Success = null;
     private Button Btn_Fail = null;
+    private Text Txt_Test = null;
+    private Button Btn_Test = null;
 
     public override void InitStart()
     {
         Txt_Timer = gameObject.transform.Find("Txt_Timer").GetComponent<Text>();
         Btn_Success = gameObject.transform.Find("Btn_Success").GetComponent<Button>();
         Btn_Fail = gameObject.transform.Find("Btn_Fail").GetComponent<Button>();
+        Txt_Test = gameObject.transform.Find("Txt_Test").GetComponent<Text>();
+        Btn_Test = gameObject.transform.Find("Btn_Test").GetComponent<Button>();
         AddClicks();
     }
 
@@ -25,12 +29,20 @@ public class GamePanel : BasePanel
     {
         Btn_Success.onClick.AddListener(OnSuccessClick);
         Btn_Fail.onClick.AddListener(OnFailClick);
+        Btn_Test.onClick.AddListener(OnTestClick);
 
     }
+
+
 
     //---------------------------------------注意以上会完成变量初始化，刷新时会更新变量--------------------------------------------
 
     //defaultFcuntion
+
+
+    private void OnTestClick()
+    {
+    }
 
     private void OnSuccessClick()
     {
